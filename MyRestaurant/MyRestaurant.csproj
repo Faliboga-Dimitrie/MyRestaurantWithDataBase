@@ -9,8 +9,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Convertors\" />
-    <Folder Include="Helpers\" />
     <Folder Include="Models\BuisnessLogicLayer\" />
     <Folder Include="Models\DataAcessLayer\" />
     <Folder Include="ViewModels\" />
