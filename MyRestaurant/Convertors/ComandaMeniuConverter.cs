@@ -5,7 +5,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Data;
-using MyRestaurant.Models;
 
 namespace MyRestaurant.Convertors
 {

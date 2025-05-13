@@ -1,0 +1,16 @@
+﻿<Window x:Class="MyRestaurant.Views.StartWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MyRestaurant"
+        mc:Ignorable="d"
+        Title="StartWindow" Height="450" Width="800">
+    <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+        <Button Content="View Menu" Width="100" Height="30" Command="{Binding ViewMenuCommand}"/>
+        <Button Content="Register" Width="100" Height="30" Command="{Binding RegisterCommand}"/>
+        <Button Content="LogIn" Width="100" Height="30" Command="{Binding LoginCommand}"/>
+        <Button Content="Exit" Width="100" Height="30" Command="{Binding ExitCommand}"/>
+    </StackPanel>
+</Window>
+
