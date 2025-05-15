@@ -62,12 +62,17 @@
             <TextBox Style="{StaticResource WatermarkedTextBox}" Tag="Adresa de livrare"
              Text="{Binding Adresa, UpdateSourceTrigger=PropertyChanged}" Margin="0,5"/>
 
-            <PasswordBox x:Name="PasswordBox" Margin="0,5"/>
+            <TextBox Style="{StaticResource WatermarkedTextBox}" Tag="Parola"
+            Text="{Binding Password, UpdateSourceTrigger=PropertyChanged}" Margin="0,5"/>
 
-            <ComboBox SelectedItem="{Binding TipUtilizator}" Margin="0,5">
-                <ComboBoxItem Content="Client"/>
-                <ComboBoxItem Content="Angajat"/>
-            </ComboBox>
+            <StackPanel Margin="0,5">
+                <Label Content="Tip Utilizator:" FontWeight="Bold" />
+                <ComboBox SelectedValue="{Binding TipUtilizator}" SelectedValuePath="Content"   
+                          Margin="0,5">
+                    <ComboBoxItem Content="Client"/>
+                    <ComboBoxItem Content="Angajat"/>
+                </ComboBox>
+            </StackPanel>
 
             <Button Content="Register" Margin="0,10"
             Command="{Binding RegisterCommand}">
@@ -78,7 +83,7 @@
                         <Binding Path="Email"/>
                         <Binding Path="Telefon"/>
                         <Binding Path="Adresa"/>
-                        <Binding ElementName="PasswordBox" Path="Password"/>
+                        <Binding Path="Password"/>
                         <Binding Path="TipUtilizator"/>
                     </MultiBinding>
                 </Button.CommandParameter>

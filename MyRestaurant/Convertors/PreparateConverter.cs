@@ -8,7 +8,7 @@ using System.Windows.Data;
 
 namespace MyRestaurant.Convertors
 {
-    internal class PreparateConvertor : IMultiValueConverter
+    public class PreparateConvertor : IMultiValueConverter
     {
         public object Convert(object[] values, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {

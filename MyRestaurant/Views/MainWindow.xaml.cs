@@ -1,4 +1,4 @@
-﻿using MyRestaurant.ViewModels;
+﻿using MyRestaurant.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,18 +12,19 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using MyRestaurant.ViewModels;
 
 namespace MyRestaurant.Views
 {
     /// <summary>
-    /// Interaction logic for LoginWindow.xaml
+    /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class LoginWindow : Window
+    public partial class MainWindow : Window
     {
-        public LoginWindow()
+        public MainWindow(Utilizatori user)
         {
             InitializeComponent();
-            DataContext = new LoginViewModel();
+            DataContext = new MainWindowViewModel(user);
         }
     }
 }

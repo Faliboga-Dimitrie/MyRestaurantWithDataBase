@@ -9,7 +9,7 @@ using MyRestaurant.Models;
 
 namespace MyRestaurant.Convertors
 {
-    internal class MeniuPreparatConvertor : IMultiValueConverter
+    public class MeniuPreparatConvertor : IMultiValueConverter
     {
         public object Convert(object[] values, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {

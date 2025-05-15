@@ -8,7 +8,7 @@ using MyRestaurant.Models;
 
 namespace MyRestaurant.Convertors
 {
-    internal class ComenziConvertor : IMultiValueConverter
+    public class ComenziConvertor : IMultiValueConverter
     {
         public object Convert(object[] values, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {

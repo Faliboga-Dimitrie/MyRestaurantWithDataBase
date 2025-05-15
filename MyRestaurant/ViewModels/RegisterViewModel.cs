@@ -11,10 +11,13 @@ using System.Windows.Controls;
 using MyRestaurant.Models;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using MyRestaurant.Models.BuisnessLogicLayer;
+using MyRestaurant.Helpers;
+using System.Collections.ObjectModel;
 
 namespace MyRestaurant.ViewModels
 {
-    public class RegisterViewModel : INotifyPropertyChanged
+    public class RegisterViewModel : BasePropertyChanged
     {
         private string _nume;
         private string _prenume;
@@ -22,6 +25,14 @@ namespace MyRestaurant.ViewModels
         private string _telefon;
         private string _adresa;
         private string _tipUtilizator;
+        private string _password;
+        private UtilizatoriBLL _utilizatoriBLL;
+
+        public ObservableCollection<Utilizatori> UtilizatoriList
+        {
+            get => _utilizatoriBLL.UtilizatoriList; // Assuming UtilizatoriList is a property in UtilizatoriBLL
+            set => _utilizatoriBLL.UtilizatoriList = value; // Assuming UtilizatoriList is a property in UtilizatoriBLL
+        }
 
         public string Nume
         {
@@ -59,6 +70,12 @@ namespace MyRestaurant.ViewModels
             set { _tipUtilizator = value; OnPropertyChanged(); }
         }
 
+        public string Password
+        {
+            get => _password;
+            set { _password = value; OnPropertyChanged(); }
+        }
+
         public ICommand RegisterCommand { get; }
         public ICommand BackCommand { get; }
 
@@ -66,15 +83,28 @@ namespace MyRestaurant.ViewModels
         {
             RegisterCommand = new RelayCommand<object>(ExecuteRegister);
             BackCommand = new RelayCommand<object>(ExecuteBack);
+            _utilizatoriBLL = new UtilizatoriBLL();
+            UtilizatoriList = _utilizatoriBLL.GetAllUtilizatori();
         }
 
         private void ExecuteRegister(object parameter)
         {
             if (parameter is Utilizatori utilizator)
             {
-                // Save to DB or call a service here
-                // e.g., Database.Save(utilizator);
+                _utilizatoriBLL.AddMethode(utilizator);
+                if (!string.IsNullOrEmpty(_utilizatoriBLL.ErrorMessage))
+                {
+                    MessageBox.Show(_utilizatoriBLL.ErrorMessage, "Eroare", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
                 MessageBox.Show("Utilizatorul a fost inregistrat cu succes!", "Inregistrare", MessageBoxButton.OK, MessageBoxImage.Information);
+                Nume = string.Empty;
+                Prenume = string.Empty;
+                Email = string.Empty;
+                Telefon = string.Empty;
+                Adresa = string.Empty;
+                Password = string.Empty;
+                TipUtilizator = string.Empty;
             }
         }
 
@@ -83,13 +113,6 @@ namespace MyRestaurant.ViewModels
             var window = new StartWindow();
             window.Show();
             Application.Current.Windows[0]?.Close(); // Close current RegisterWindow
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        protected void OnPropertyChanged([CallerMemberName] string name = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
     }
 }
