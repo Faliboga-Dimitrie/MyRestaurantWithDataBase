@@ -1,11 +1,13 @@
-﻿using MyRestaurant.Models;
+﻿using MyRestaurant.Helpers;
+using MyRestaurant.Models;
+using MyRestaurant.Models.BuisnessLogicLayer;
+using MyRestaurant.Views;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using MyRestaurant.Models.BuisnessLogicLayer;
-using MyRestaurant.Helpers;
+using System.Windows;
 using System.Windows.Input;
 
 namespace MyRestaurant.ViewModels
@@ -45,11 +47,15 @@ namespace MyRestaurant.ViewModels
         public ICommand ShowPlaceOrderCommand { get; }
         public ICommand ShowMyOrdersCommand { get; }
 
-        public ICommand ShowEditMenuCommand { get; }
-
         public ICommand ShowEditOrdersCommand { get; }
 
         public ICommand LogoutCommand { get; }
+
+        public ICommand ModifyPreparatCommand { get; }
+
+        public ICommand ModifyAlergeniCommand { get; }
+
+        public ICommand ModifyCategorieCommand { get; }
 
         public MainWindowViewModel(Utilizatori utilizatori)
         {
@@ -58,9 +64,11 @@ namespace MyRestaurant.ViewModels
             ShowViewMenuCommand = new RelayCommand<object>(ShowViewMenu);
             ShowPlaceOrderCommand = new RelayCommand<object>(ShowPlaceOrder);
             ShowMyOrdersCommand = new RelayCommand<object>(ShowMyOrders);
-            ShowEditMenuCommand = new RelayCommand<object>(ShowEditMenu);
             ShowEditOrdersCommand = new RelayCommand<object>(ShowEditOrders);
             LogoutCommand = new RelayCommand<object>(Logout);
+            ModifyPreparatCommand = new RelayCommand<object>(ShowModifyPreparat);
+            ModifyAlergeniCommand = new RelayCommand<object>(ShowModifyAlergeni);
+            ModifyCategorieCommand = new RelayCommand<object>(ShowModifyCategorie);
         }
 
         private void ShowViewMenu(object obj)
@@ -78,11 +86,6 @@ namespace MyRestaurant.ViewModels
             // Logic to show the my orders
         }
 
-        private void ShowEditMenu(object obj)
-        {
-            // Logic to show the edit menu
-        }
-
         private void ShowEditOrders(object obj)
         {
             // Logic to show the edit orders
@@ -90,7 +93,32 @@ namespace MyRestaurant.ViewModels
 
         private void Logout(object obj)
         {
-            // Logic to logout
+            _selectedUtilizator = null;
+            CurrentView = null; // Or navigate to the login view
+            var window = new StartWindow();
+            window.Show();
+            Application.Current.Windows[0]?.Close();
+        }
+
+        public void ShowModifyPreparat(object obj)
+        {
+            var window = new ModifyPreparatWindow(_selectedUtilizator);
+            window.Show();
+            Application.Current.Windows[0]?.Close();
+        }
+
+        public void ShowModifyAlergeni(object obj)
+        {
+            var window = new ModifyAlergeniView(_selectedUtilizator);
+            window.Show();
+            Application.Current.Windows[0]?.Close();
+        }
+
+        public void ShowModifyCategorie(object obj)
+        {
+            var window = new ModifyCategoriiWindow(_selectedUtilizator);
+            window.Show();
+            Application.Current.Windows[0]?.Close();
         }
     }
 }

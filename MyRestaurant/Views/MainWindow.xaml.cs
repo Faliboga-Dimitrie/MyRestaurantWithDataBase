@@ -26,5 +26,15 @@ namespace MyRestaurant.Views
             InitializeComponent();
             DataContext = new MainWindowViewModel(user);
         }
+
+        private void EditMenuButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (EditMenuButton.ContextMenu != null)
+            {
+                EditMenuButton.ContextMenu.PlacementTarget = EditMenuButton; // position relative to button
+                EditMenuButton.ContextMenu.IsOpen = true; // open the menu
+            }
+        }
+
     }
 }

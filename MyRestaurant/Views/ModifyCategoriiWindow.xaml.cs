@@ -1,4 +1,6 @@
-﻿using System;
+﻿using MyRestaurant.Models;
+using MyRestaurant.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,13 +17,14 @@ using System.Windows.Shapes;
 namespace MyRestaurant.Views
 {
     /// <summary>
-    /// Interaction logic for AddPreparatWindow.xaml
+    /// Interaction logic for ModifyCategoriiWindow.xaml
     /// </summary>
-    public partial class AddPreparatWindow : Window
+    public partial class ModifyCategoriiWindow : Window
     {
-        public AddPreparatWindow()
+        public ModifyCategoriiWindow(Utilizatori user)
         {
             InitializeComponent();
+            DataContext = new ModifyCategoriiViewModel(user);
         }
     }
 }

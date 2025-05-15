@@ -45,7 +45,7 @@ namespace MyRestaurant.Models.DataAcessLayer
         {
             var nameParam = new SqlParameter("@NumeCategorie", categorieName);
             var idParam = new SqlParameter("@IDCategorie", categorieID);
-            Database.ExecuteSqlRawAsync("EXEC UpdateCategorii @NumeCategorie, @IDCategorie", nameParam, idParam);
+            Database.ExecuteSqlRawAsync("EXEC UpdateCategorii @IDCategorie, @NumeCategorie", nameParam, idParam);
         }
 
         public void DeleteCategorie(int categorieID)

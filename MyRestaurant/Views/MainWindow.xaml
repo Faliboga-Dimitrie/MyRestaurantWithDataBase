@@ -8,36 +8,35 @@
 
    <Window.Resources>
        <!-- Converter to toggle visibility -->
-       <local:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
-       
-       <!--Data template for the main content area-->
-        <DataTemplate DataType="{x:Type vm:ViewMenuViewModel}">
-            <Views:MenuWindow />
-       </DataTemplate>
-       <!--<DataTemplate DataType="{x:Type vm:PlaceOrderViewModel}">
-           <Views:PlaceOrderView />-->
-       <!--</DataTemplate>-->
-   </Window.Resources>
+        <local:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+    </Window.Resources>
 
    <DockPanel>
 
        <!-- Top Menu Buttons -->
-       <StackPanel Orientation="Horizontal" DockPanel.Dock="Top" Margin="10" HorizontalAlignment="Center" >
-           <Button Content="View Menu" Command="{Binding ShowViewMenuCommand}" Margin="5" Width="100" />
-           <Button Content="Place Order" Command="{Binding ShowPlaceOrderCommand}" Margin="5" Width="100" />
-           <Button Content="View Orders" Command="{Binding ShowMyOrdersCommand}" Margin="5" Width="100" />
+        <StackPanel Orientation="Horizontal" DockPanel.Dock="Top" Margin="10" HorizontalAlignment="Center" >
+            <Button Content="View Menu" Command="{Binding ShowViewMenuCommand}" Margin="5" Width="100" />
+            <Button Content="Place Order" Command="{Binding ShowPlaceOrderCommand}" Margin="5" Width="100" />
+            <Button Content="View Orders" Command="{Binding ShowMyOrdersCommand}" Margin="5" Width="100" />
 
-           <!-- Visible only to employees -->
-           <Button Content="Edit Menu" Command="{Binding ShowEditMenuCommand}" Margin="5" Width="100"
+            <!-- Visible only to employees -->
+            <!-- Replace your existing Edit Menu button with this -->
+            <Button x:Name="EditMenuButton" Content="Edit Menu" Margin="5" Width="100" Click="EditMenuButton_Click"
+        Visibility="{Binding IsEmployee, Converter={StaticResource BoolToVisibilityConverter}}">
+                <Button.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="Modify Preparat" Command="{Binding ModifyPreparatCommand}" />
+                        <MenuItem Header="Modify Alergeni" Command="{Binding ModifyAlergeniCommand}" />
+                        <MenuItem Header="Modify categorie" Command="{Binding ModifyCategorieCommand}" />
+                    </ContextMenu>
+                </Button.ContextMenu>
+            </Button>
+
+            <Button Content="Edit Orders" Command="{Binding ShowEditOrdersCommand}" Margin="5" Width="100"
                    Visibility="{Binding IsEmployee, Converter={StaticResource BoolToVisibilityConverter}}" />
-           <Button Content="Edit Orders" Command="{Binding ShowEditOrdersCommand}" Margin="5" Width="100"
-                   Visibility="{Binding IsEmployee, Converter={StaticResource BoolToVisibilityConverter}}" />
 
-           <Button Content="Logout" Command="{Binding LogoutCommand}" Margin="5" Width="100" />
-       </StackPanel>
+            <Button Content="Logout" Command="{Binding LogoutCommand}" Margin="5" Width="100" />
+        </StackPanel>
 
-       <!-- Main Content Area -->
-       <ContentControl Content="{Binding CurrentView}" Margin="10" />
-
-   </DockPanel>
+    </DockPanel>
 </Window>
