@@ -175,7 +175,7 @@ namespace MyRestaurant.ViewModels
         {
             var window = new MainWindow(CurrentUser);
             window.Show();
-            Application.Current.Windows.OfType<Window>().SingleOrDefault(w => w.DataContext == this)?.Close();
+            Application.Current.Windows[0]?.Close();
         }
     }
 }

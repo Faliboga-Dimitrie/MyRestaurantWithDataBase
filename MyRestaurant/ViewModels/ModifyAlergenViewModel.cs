@@ -81,7 +81,7 @@ namespace MyRestaurant.ViewModels
         {
             _alergenBLL = new AlergeniBLL();
             CurrentUser = user;
-            AlergeniList = _alergenBLL.GetAlergeniList(); 
+            AlergeniList = _alergenBLL.GetAllAlergeni(); 
             BackToMain = new RelayCommand<object>(Back);
             AddAlergenCommand = new RelayCommand<object>(AddAlergen);
             UpdateAlergenCommand = new RelayCommand<object>(UpdateAlergen);

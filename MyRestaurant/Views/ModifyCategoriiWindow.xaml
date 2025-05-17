@@ -70,7 +70,6 @@
                   FontSize="13"
                   SelectionMode="Single">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="ID" Binding="{Binding Idcategorie}" Width="80" />
                 <DataGridTextColumn Header="Category Name" Binding="{Binding NumeCategorie}" Width="*" />
             </DataGrid.Columns>
         </DataGrid>

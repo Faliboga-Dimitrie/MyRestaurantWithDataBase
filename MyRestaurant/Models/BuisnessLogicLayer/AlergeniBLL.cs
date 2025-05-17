@@ -84,7 +84,7 @@ namespace MyRestaurant.Models.BuisnessLogicLayer
             }
         }
 
-        public ObservableCollection<Alergeni> GetAlergeniList()
+        public ObservableCollection<Alergeni> GetAllAlergeni()
         {
             return [.. context.Alergenis];
         }

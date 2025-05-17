@@ -1,75 +1,194 @@
 ﻿<Window x:Class="MyRestaurant.Views.ModifyPreparatWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:local="clr-namespace:MyRestaurant.ViewModels"
-        xmlns:conv="clr-namespace:MyRestaurant.Convertors"
-        Title="Adaugă Preparat" Height="400" Width="400">
+        xmlns:converters="clr-namespace:MyRestaurant.Convertors"
+        Title="Modifică Preparat" Height="800" Width="950"
+        WindowStartupLocation="CenterScreen">
     <Window.Resources>
-        <conv:PreparateConvertor x:Key="PreparateConvertor" />
+        <converters:NullToBoolConverter x:Key="NullToBoolConverter"/>
+        <converters:PreparateConvertor x:Key="PreparateConvertor"/>
+        <converters:ByteArrayToImageConverter x:Key="ByteArrayToImageConverter"/>
     </Window.Resources>
-
-    <Grid Margin="20">
+    <Grid Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="120"/>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
 
-        <!-- Name -->
-        <TextBlock Text="Nume preparat:" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center"/>
-        <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Grid.Row="0" Grid.Column="1" Margin="5"/>
+        <StackPanel Orientation="Vertical" Grid.Row="0" Margin="0,0,0,10">
+            <TextBlock Text="Detalii Preparat" FontSize="18" FontWeight="Bold" Margin="0,0,0,10"/>
 
-        <!-- Price -->
-        <TextBlock Text="Preț:" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center"/>
-        <TextBox Text="{Binding Price, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Grid.Column="1" Margin="5"/>
+            <!-- Input Fields -->
+            <UniformGrid Columns="2" Rows="5" Margin="0,0,0,10">
+                <TextBlock Text="Nume preparat:" VerticalAlignment="Center"/>
+                <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Margin="5"/>
 
-        <!-- Quantity Per Portion -->
-        <TextBlock Text="Cantitate/Porție:" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center"/>
-        <TextBox Text="{Binding QuantityPerPortion, UpdateSourceTrigger=PropertyChanged}" Grid.Row="2" Grid.Column="1" Margin="5"/>
+                <TextBlock Text="Preț:" VerticalAlignment="Center"/>
+                <TextBox Text="{Binding Price, UpdateSourceTrigger=PropertyChanged}" Margin="5"/>
 
-        <!-- Total Quantity -->
-        <TextBlock Text="Cantitate totală:" Grid.Row="3" Grid.Column="0" VerticalAlignment="Center"/>
-        <TextBox Text="{Binding TotalQuantity, UpdateSourceTrigger=PropertyChanged}" Grid.Row="3" Grid.Column="1" Margin="5"/>
+                <TextBlock Text="Cantitate/Porție:" VerticalAlignment="Center"/>
+                <TextBox Text="{Binding QuantityPerPortion, UpdateSourceTrigger=PropertyChanged}" Margin="5"/>
 
-        <!-- Category -->
-        <TextBlock Text="Categorie:" Grid.Row="4" Grid.Column="0" VerticalAlignment="Center"/>
-        <ComboBox ItemsSource="{Binding CategoriList}" 
-          SelectedValue="{Binding SelectedCategoryId, Mode=TwoWay}"
-          SelectedValuePath="Idcategorie"
-          DisplayMemberPath="NumeCategorie"
-          Grid.Row="4" Grid.Column="1" Margin="5"/>
+                <TextBlock Text="Cantitate totală:" VerticalAlignment="Center"/>
+                <TextBox Text="{Binding TotalQuantity, UpdateSourceTrigger=PropertyChanged}" Margin="5"/>
 
-        <!-- Add Button -->
-        <Button Content="Adaugă preparat"
-                Grid.Row="5" Grid.Column="1"
-                HorizontalAlignment="Right"
-                Width="150"
-                Margin="5"
-                Command="{Binding AddPreparat}">
-            <Button.CommandParameter>
-                <MultiBinding Converter="{StaticResource PreparateConvertor}">
-                    <!-- Name -->
-                    <Binding Path="Name" />
-                    <!-- Price -->
-                    <Binding Path="Price" />
-                    <!-- QuantityPerPortion -->
-                    <Binding Path="QuantityPerPortion" />
-                    <!-- TotalQuantity -->
-                    <Binding Path="TotalQuantity" />
-                    <!-- Category Id -->
-                    <Binding Path="SelectedCategoryId" />
-                </MultiBinding>
-            </Button.CommandParameter>
-        </Button>
+                <TextBlock Text="Categorie:" VerticalAlignment="Center"/>
+                <ComboBox ItemsSource="{Binding CategoriList}" 
+                          SelectedValue="{Binding SelectedCategoryId, Mode=TwoWay}"
+                          SelectedValuePath="Idcategorie"
+                          DisplayMemberPath="NumeCategorie"
+                          Margin="5"/>
+            </UniformGrid>
 
-        <!-- Error Message -->
-        <TextBlock Text="{Binding ErrorMessage}" Foreground="Red" Grid.Row="5" Grid.Column="0" VerticalAlignment="Center" Margin="5"/>
+            <!-- Allergens Selection -->
+            <TextBlock Text="Alergeni disponibili:" Margin="0,10,0,5"/>
+            <ScrollViewer Height="100" VerticalScrollBarVisibility="Auto">
+                <ItemsControl ItemsSource="{Binding SelectableAlergeni}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <CheckBox Content="{Binding Alergen.NumeAlergen}" 
+                                      IsChecked="{Binding IsSelected, Mode=TwoWay}"/>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+
+            <GroupBox Header="Fotografii Preparat" Grid.Row="1" Grid.Column="1" Margin="10">
+                <DockPanel>
+                    <!-- Image List Gallery -->
+                    <ListBox ItemsSource="{Binding FilteredFotografii}"
+                 SelectedItem="{Binding SelectedFotografie, Mode=TwoWay}"
+                 Margin="5"
+                 DockPanel.Dock="Top"
+                 HorizontalAlignment="Stretch"
+                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                 ScrollViewer.VerticalScrollBarVisibility="Auto"
+                 SelectionMode="Single">
+                        <ListBox.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel IsItemsHost="True" Orientation="Horizontal"/>
+                            </ItemsPanelTemplate>
+                        </ListBox.ItemsPanel>
+
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Border BorderBrush="Gray" BorderThickness="1" Margin="5">
+                                    <Image Width="100" Height="100" Stretch="UniformToFill"
+                               Source="{Binding Fotografie, Converter={StaticResource ByteArrayToImageConverter}}"/>
+                                </Border>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+
+                    <!-- Buttons -->
+                    <StackPanel Orientation="Horizontal" DockPanel.Dock="Bottom" HorizontalAlignment="Right" Margin="5">
+                        <Button Content="Adaugă fotografie" Width="130" Margin="5"
+                    Command="{Binding AddFotografieCommand}"
+                    IsEnabled="{Binding SelectedPreparat, Converter={StaticResource NullToBoolConverter}}"/>
+                        <Button Content="Șterge fotografie" Width="130" Margin="5"
+                    Command="{Binding DeleteFotografieCommand}"
+                    IsEnabled="{Binding SelectedFotografie, Converter={StaticResource NullToBoolConverter}}"/>
+                    </StackPanel>
+                </DockPanel>
+            </GroupBox>
+
+
+            <!-- Error Message -->
+            <TextBlock Text="{Binding ErrorMessage}" Foreground="Red" Margin="0,5,0,0"/>
+        </StackPanel>
+
+        <Grid Grid.Row="1" Margin="0,0,0,10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="2*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Preparat List -->
+            <GroupBox Header="Lista Preparate" Grid.Column="0" Margin="0,0,10,0">
+                <DataGrid ItemsSource="{Binding PreparateList}" 
+                          SelectedItem="{Binding SelectedPreparat, Mode=TwoWay}" 
+                          AutoGenerateColumns="False"
+                          IsReadOnly="True" 
+                          Margin="5"
+                          SelectionMode="Single"
+                          RowHeight="30"
+                          AlternatingRowBackground="LightGray">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Categorie" Binding="{Binding CategoryName}" Width="100"/>
+                        <DataGridTextColumn Header="Nume" Binding="{Binding Denumire}" Width="100"/>
+                        <DataGridTextColumn Header="Preț" Binding="{Binding Pret}" Width="100"/>
+                        <DataGridTextColumn Header="Cant./Porție" Binding="{Binding CantitatePortie}" Width="100"/>
+                        <DataGridTextColumn Header="Cant. Totală" Binding="{Binding CantitateTotala}" Width="100"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </GroupBox>
+
+            <!-- Allergens of Selected Preparat -->
+            <GroupBox Header="Alergeni Preparat" Grid.Column="1">
+                <ListBox ItemsSource="{Binding SelectedPreparat.Idalergens}"
+                         SelectedItem="{Binding SelectedAlergen, Mode=TwoWay}"
+                         DisplayMemberPath="NumeAlergen"
+                         Margin="5"
+                         SelectionMode="Single" />
+            </GroupBox>
+        </Grid>
+
+        <!-- Action Buttons -->
+        <StackPanel Orientation="Horizontal" Grid.Row="2" HorizontalAlignment="Right" Margin="0,10,0,0">
+
+            <!-- Clear User input -->
+            <Button Content="Deselecteaza" Command="{Binding ClearInput}" Margin="5" Width="100"
+                    IsEnabled="{Binding SelectedPreparat, Converter={StaticResource NullToBoolConverter}}"/>
+
+            <!-- ADD Button -->
+            <Button Content="Adaugă" Margin="5" Width="100" Command="{Binding AddPreparat}">
+                <Button.CommandParameter>
+                    <MultiBinding Converter="{StaticResource PreparateConvertor}">
+                        <Binding Path="Name"/>
+                        <Binding Path="Price"/>
+                        <Binding Path="QuantityPerPortion"/>
+                        <Binding Path="TotalQuantity"/>
+                        <Binding Path="SelectedCategoryId"/>
+                    </MultiBinding>
+                </Button.CommandParameter>
+            </Button>
+
+            <!-- UPDATE Button -->
+            <Button Content="Actualizează"
+                Margin="5" Width="100"
+                Command="{Binding UpdatePreparat}"
+                IsEnabled="{Binding SelectedPreparat, Converter={StaticResource NullToBoolConverter}}">
+                <Button.CommandParameter>
+                    <MultiBinding Converter="{StaticResource PreparateConvertor}">
+                        <Binding Path="Name"/>
+                        <Binding Path="Price"/>
+                        <Binding Path="QuantityPerPortion"/>
+                        <Binding Path="TotalQuantity"/>
+                        <Binding Path="SelectedCategoryId"/>
+                    </MultiBinding>
+                </Button.CommandParameter>
+            </Button>
+
+            <!-- DELETE Button -->
+            <Button Content="Șterge"
+                Margin="5" Width="100"
+                Command="{Binding DeletePreparat}"
+                IsEnabled="{Binding SelectedPreparat, Converter={StaticResource NullToBoolConverter}}">
+                <Button.CommandParameter>
+                    <Binding Path="SelectedPreparat"/>
+                </Button.CommandParameter>
+            </Button>
+
+            <!-- DELETE ALERGEN Button -->
+            <Button Content="Șterge Alergen"
+                Margin="5" Width="120"
+                Command="{Binding DeleteAlergen}"
+                CommandParameter="{Binding SelectedAlergen}"
+                IsEnabled="{Binding SelectedAlergen, Converter={StaticResource NullToBoolConverter}}"/>
+
+            <!-- BACK Button -->
+            <Button Content="Înapoi" Command="{Binding BackToMain}" Margin="5" Width="100"/>
+        </StackPanel>
     </Grid>
 </Window>

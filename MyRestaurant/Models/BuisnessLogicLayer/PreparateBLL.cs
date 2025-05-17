@@ -1,10 +1,11 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using MyRestaurant.Models.DataAcessLayer;
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using MyRestaurant.Models.DataAcessLayer;
-using System.Collections.ObjectModel;
 
 namespace MyRestaurant.Models.BuisnessLogicLayer
 {
@@ -13,7 +14,7 @@ namespace MyRestaurant.Models.BuisnessLogicLayer
         private MyRestaurantDAL context = new MyRestaurantDAL();
         public ObservableCollection<Preparate> PreparateList { get; set; }
         public string ErrorMessage { get; set; }
-        public void AddMethode(object obj)
+        public void AddMethode(object obj, List<Alergeni> selectedAlergeni)
         {
             Preparate preparate = obj as Preparate;
             if (preparate != null)
@@ -54,6 +55,12 @@ namespace MyRestaurant.Models.BuisnessLogicLayer
                 {
                     try
                     {
+                        var existingAlergeni = context.Alergenis
+                    .Where(a => selectedAlergeni.Select(sa => sa.Idalergen).Contains(a.Idalergen))
+                    .ToList();
+
+                        // Assign tracked entities to the preparat
+                        preparate.Idalergens = existingAlergeni;
                         context.Preparates.Add(preparate);
                         context.SaveChanges();
                         PreparateList.Add(preparate);
@@ -67,7 +74,7 @@ namespace MyRestaurant.Models.BuisnessLogicLayer
             }
         }
 
-        public void UpdateMethode(object obj)
+        public void UpdateMethode(object obj, List<Alergeni> selectedAlergeni)
         {
             Preparate preparate = obj as Preparate;
             if (preparate != null)
@@ -106,8 +113,36 @@ namespace MyRestaurant.Models.BuisnessLogicLayer
                     {
                         //context.Entry(preparate).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
                         //context.SaveChanges();
-                        context.UpdatePreparate(preparate.Idpreparat, preparate.Denumire, preparate.Pret, preparate.CantitatePortie, preparate.CantitateTotala, preparate.Idcategorie);
-                        ErrorMessage = string.Empty;
+                        //context.UpdatePreparate(preparate.Idpreparat, preparate.Denumire, preparate.Pret, preparate.CantitatePortie, preparate.CantitateTotala, preparate.Idcategorie);
+                        //ErrorMessage = string.Empty;
+                        // Attach preparat to context if not tracked
+                        var existingPreparat = context.Preparates
+                            .Include(p => p.Idalergens)
+                            .FirstOrDefault(p => p.Idpreparat == preparate.Idpreparat);
+
+                        var existingAlergeni = context.Alergenis
+                    .Where(a => selectedAlergeni.Select(sa => sa.Idalergen).Contains(a.Idalergen))
+                    .ToList();
+
+                        if (existingPreparat != null)
+                        {
+                            // Update scalar properties
+                            existingPreparat.Denumire = preparate.Denumire;
+                            existingPreparat.Pret = preparate.Pret;
+                            existingPreparat.CantitatePortie = preparate.CantitatePortie;
+                            existingPreparat.CantitateTotala = preparate.CantitateTotala;
+                            existingPreparat.Idcategorie = preparate.Idcategorie;
+
+                            // Update allergens
+                            existingPreparat.Idalergens.Clear();
+                            foreach (var alergen in existingAlergeni)
+                            {
+                                existingPreparat.Idalergens.Add(alergen);
+                            }
+
+                            context.SaveChanges();
+                            ErrorMessage = string.Empty;
+                        }
                     }
                     catch (Exception ex)
                     {
@@ -135,9 +170,39 @@ namespace MyRestaurant.Models.BuisnessLogicLayer
             }
         }
 
+        public void RemoveAlergenFromPreparat(int preparatId, int alergenId)
+        {
+            var preparat = context.Preparates
+                .Include(p => p.Idalergens)
+                .FirstOrDefault(p => p.Idpreparat == preparatId);
+
+            if (preparat == null)
+            {
+                ErrorMessage = "Preparatul nu a fost gasit.";
+                return;
+            }
+
+            var alergenToRemove = preparat.Idalergens.FirstOrDefault(a => a.Idalergen == alergenId);
+            if (alergenToRemove != null)
+            {
+                preparat.Idalergens.Remove(alergenToRemove);
+                context.SaveChanges();
+                ErrorMessage = string.Empty;
+            }
+            else
+            {
+                ErrorMessage = "Alergenul nu este asociat cu preparatul.";
+            }
+        }
+
         public ObservableCollection<Preparate> GetAllPreparate()
         {
-            return [.. context.Preparates];
+            var preparateWithAlergeni = context.Preparates
+                .Include(p => p.Idalergens)
+                .Include(p => p.IdcategorieNavigation)
+                .ToList();
+
+            return new ObservableCollection<Preparate>(preparateWithAlergeni);
         }
     }
 }
