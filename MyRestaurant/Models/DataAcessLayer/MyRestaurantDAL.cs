@@ -16,7 +16,7 @@ namespace MyRestaurant.Models.DataAcessLayer
         {
             var nameParam = new SqlParameter("@NumeAlergen", alergenName);
             var idParam = new SqlParameter("@IDAlergen", SqlDbType.Int) { Direction = ParameterDirection.Output };
-            Database.ExecuteSqlRawAsync("EXEC AddAlergen @NumeAlergen, @IDAlergen OUTPUT", nameParam, idParam);
+            Database.ExecuteSqlRawAsync("EXEC AddAlergen @IDAlergen OUTPUT, @NumeAlergen", idParam, nameParam);
             return (int)idParam.Value;
         }
 
@@ -24,7 +24,7 @@ namespace MyRestaurant.Models.DataAcessLayer
         {
             var nameParam = new SqlParameter("@NumeAlergen", alergenName);
             var idParam = new SqlParameter("@IDAlergen", alergenID);
-            Database.ExecuteSqlRawAsync("EXEC UpdateAlergeni @NumeAlergen, @IDAlergen", nameParam, idParam);
+            Database.ExecuteSqlRawAsync("EXEC UpdateAlergeni @IDAlergen, @NumeAlergen", idParam, nameParam);
         }
 
         public void DeleteAlergen(int alergenID)
@@ -37,7 +37,7 @@ namespace MyRestaurant.Models.DataAcessLayer
         {
             var nameParam = new SqlParameter("@NumeCategorie", categorieName);
             var idParam = new SqlParameter("@IDCategorie", SqlDbType.Int) { Direction = ParameterDirection.Output };
-            Database.ExecuteSqlRawAsync("EXEC AddCategorie @NumeCategorie, @IDCategorie OUTPUT", nameParam, idParam);
+            Database.ExecuteSqlRawAsync("EXEC AddCategorie @IDCategorie OUTPUT, @NumeCategorie", idParam, nameParam);
             return (int)idParam.Value;
         }
 
@@ -45,7 +45,7 @@ namespace MyRestaurant.Models.DataAcessLayer
         {
             var nameParam = new SqlParameter("@NumeCategorie", categorieName);
             var idParam = new SqlParameter("@IDCategorie", categorieID);
-            Database.ExecuteSqlRawAsync("EXEC UpdateCategorii @IDCategorie, @NumeCategorie", nameParam, idParam);
+            Database.ExecuteSqlRawAsync("EXEC UpdateCategorii @IDCategorie, @NumeCategorie", idParam, nameParam);
         }
 
         public void DeleteCategorie(int categorieID)
@@ -74,7 +74,7 @@ namespace MyRestaurant.Models.DataAcessLayer
             var totalQuantityParam = new SqlParameter("@CantitateTotala", totalQuantity);
             var categoryParam = new SqlParameter("@IDCategorie", categoryID);
             var idParam = new SqlParameter("@IDPreparat", preparatID);
-            Database.ExecuteSqlRawAsync("EXEC UpdatePreparat @Denumire, @Pret, @CantitatePortie, @CantitateTotala, @IDCategorie, @IDPreparat", nameParam, priceParam, quantityPerPortionParam, totalQuantityParam, categoryParam, idParam);
+            Database.ExecuteSqlRawAsync("EXEC UpdatePreparat  @IDPreparat, @Denumire, @IDCategorie, @Pret, @CantitatePortie, @CantitateTotala", idParam, nameParam, categoryParam, priceParam, quantityPerPortionParam, totalQuantityParam);
         }
 
         public void DeletePreparate(int preparatID)
@@ -97,7 +97,7 @@ namespace MyRestaurant.Models.DataAcessLayer
             var nameParam = new SqlParameter("@Denumire", name);
             var categoryParam = new SqlParameter("@IDCategorie", categoryID);
             var idParam = new SqlParameter("@IDMeniu", menuID);
-            Database.ExecuteSqlRawAsync("EXEC UpdateMeniuri @Denumire, @IDCategorie, @IDMeniu", nameParam, categoryParam, idParam);
+            Database.ExecuteSqlRawAsync("EXEC UpdateMeniuri @IDCategorie, @Denumire, @IDMeniu", categoryParam, nameParam, idParam);
         }
 
         public void DeleteMeniu(int menuID)

@@ -3,10 +3,79 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:MyRestaurant.Views"
+        xmlns:local="clr-namespace:MyRestaurant.Convertors"
         mc:Ignorable="d"
-        Title="ModifyAlergeniView" Height="450" Width="800">
-    <Grid>
-        
+        Title="Manage Allergens" Height="450" Width="800">
+    <Window.Resources>
+        <local:AlergeniConverter x:Key="AlergeniConverter"/>
+        <local:StringToVisibilityConverter x:Key="StringToVisibilityConverter"/>
+        <local:NullToBoolConverter x:Key="NullToBoolConverter"/>
+    </Window.Resources>
+
+    <Grid Margin="10">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="2*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- Allergens List -->
+        <GroupBox Header="Existing Allergens" Grid.Column="0" Margin="0,0,10,0">
+            <ListView ItemsSource="{Binding AlergeniList}" 
+                      SelectedItem="{Binding SelectedAlergen}"
+                      ScrollViewer.VerticalScrollBarVisibility="Auto">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding NumeAlergen}" Padding="5"/>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </GroupBox>
+
+        <!-- Management Section -->
+        <StackPanel Grid.Column="1" Margin="10,0,0,0">
+            <!-- Error Message -->
+            <TextBlock Text="{Binding ErrorMessage}" 
+                       Foreground="Red" 
+                       Margin="0,0,0,10"
+                       TextWrapping="Wrap"
+                       Visibility="{Binding ErrorMessage, Converter={StaticResource StringToVisibilityConverter}}"/>
+
+            <!-- Input Field -->
+            <Label Content="Allergen Name:"/>
+            <TextBox Text="{Binding AlergenName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                     Margin="0,0,0,10"/>
+
+            <!-- Action Buttons -->
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <!-- Add Button -->
+                <Button Content="Add" Margin="0,0,10,0" Command="{Binding AddAlergenCommand}">
+                    <Button.CommandParameter>
+                        <MultiBinding Converter="{StaticResource AlergeniConverter}">
+                            <Binding Path="AlergenName"/>
+                        </MultiBinding>
+                    </Button.CommandParameter>
+                </Button>
+
+                <!-- Update Button -->
+                <Button Content="Update" Margin="0,0,10,0" Command="{Binding UpdateAlergenCommand}"
+                IsEnabled="{Binding SelectedAlergen, Converter={StaticResource NullToBoolConverter}}">
+                    <Button.CommandParameter>
+                        <MultiBinding Converter="{StaticResource AlergeniConverter}">
+                            <Binding Path="AlergenName"/>
+                            <Binding Path="SelectedAlergen"/>
+                        </MultiBinding>
+                    </Button.CommandParameter>
+                </Button>
+
+                <!-- Delete Button -->
+                <Button Content="Delete" Margin="0,0,10,0" 
+                Command="{Binding DeleteAlergenCommand}"
+                CommandParameter="{Binding SelectedAlergen}"
+                IsEnabled="{Binding SelectedAlergen, Converter={StaticResource NullToBoolConverter}}"/>
+
+                <!-- Back Button -->
+                <Button Content="Back" Command="{Binding BackToMain}"/>
+            </StackPanel>
+        </StackPanel>
     </Grid>
 </Window>

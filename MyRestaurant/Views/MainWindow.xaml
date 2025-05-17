@@ -21,7 +21,7 @@
 
             <!-- Visible only to employees -->
             <!-- Replace your existing Edit Menu button with this -->
-            <Button x:Name="EditMenuButton" Content="Edit Menu" Margin="5" Width="100" Click="EditMenuButton_Click"
+            <Button x:Name="EditMenuButton" Content="Edit Menu" Margin="5" Width="100" 
         Visibility="{Binding IsEmployee, Converter={StaticResource BoolToVisibilityConverter}}">
                 <Button.ContextMenu>
                     <ContextMenu>
