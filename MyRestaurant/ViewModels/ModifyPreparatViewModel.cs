@@ -315,7 +315,6 @@ namespace MyRestaurant.ViewModels
                     MessageBox.Show(ErrorMessage, "Eroare", MessageBoxButton.OK, MessageBoxImage.Error);
                     return;
                 }
-                PreparateList.Add(preparat);
                 MessageBox.Show("Preparatul a fost adaugat cu success!", "Adaugare", MessageBoxButton.OK, MessageBoxImage.Information);
                 Name = string.Empty; // Clear the input field after adding
                 Price = 0; // Clear the input field after adding
@@ -365,7 +364,6 @@ namespace MyRestaurant.ViewModels
                     MessageBox.Show(ErrorMessage, "Eroare", MessageBoxButton.OK, MessageBoxImage.Error);
                     return;
                 }
-                PreparateList.Remove(preparat); // Remove the category from the list
                 MessageBox.Show("Preparatul a fost sters cu success!", "Stergere", MessageBoxButton.OK, MessageBoxImage.Information);
                 Name = string.Empty; // Clear input
                 Price = 0; // Clear input
@@ -430,7 +428,7 @@ namespace MyRestaurant.ViewModels
                 {
                     // Refresh the SelectedPreparat's Fotografis collection
                     SelectedPreparat.Fotografis.Add(fotografie);
-                    OnPropertyChanged(nameof(SelectedPreparat));
+                    FilterFotografii(); // Refresh the filtered list
                 }
             }
         }
@@ -448,6 +446,7 @@ namespace MyRestaurant.ViewModels
             {
                 _fotografiBLL.DeleteMethode(SelectedFotografie);
                 SelectedPreparat.Fotografis.Remove(SelectedFotografie);
+                FilterFotografii(); // Refresh the filtered list
                 SelectedFotografie = null;
             }
             catch (Exception ex)

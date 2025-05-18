@@ -57,6 +57,8 @@ namespace MyRestaurant.ViewModels
 
         public ICommand ModifyCategorieCommand { get; }
 
+        public ICommand ModifyMenuCommand { get; }
+
         public MainWindowViewModel(Utilizatori utilizatori)
         {
             _utilizatoriBLL = new UtilizatoriBLL();
@@ -69,11 +71,14 @@ namespace MyRestaurant.ViewModels
             ModifyPreparatCommand = new RelayCommand<object>(ShowModifyPreparat);
             ModifyAlergeniCommand = new RelayCommand<object>(ShowModifyAlergeni);
             ModifyCategorieCommand = new RelayCommand<object>(ShowModifyCategorie);
+            ModifyMenuCommand = new RelayCommand<object>(ShowModifyMenu);
         }
 
         private void ShowViewMenu(object obj)
         {
-            // Logic to show the view menu
+            Window window = new MenuWindow(_selectedUtilizator);
+            window.Show();
+            Application.Current.Windows[0]?.Close();
         }
 
         private void ShowPlaceOrder(object obj)
@@ -117,6 +122,13 @@ namespace MyRestaurant.ViewModels
         public void ShowModifyCategorie(object obj)
         {
             var window = new ModifyCategoriiWindow(_selectedUtilizator);
+            window.Show();
+            Application.Current.Windows[0]?.Close();
+        }
+
+        public void ShowModifyMenu(object obj)
+        {
+            var window = new ModifyMenuView(_selectedUtilizator);
             window.Show();
             Application.Current.Windows[0]?.Close();
         }

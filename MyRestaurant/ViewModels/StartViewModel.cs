@@ -28,7 +28,7 @@ namespace MyRestaurant.ViewModels
 
         private void ViewMenu(object obj)
         {
-            var window = new MenuWindow();
+            var window = new MenuWindow(null);
             window.Show();
             Application.Current.Windows[0]?.Close(); // Close current StartWindow
         }

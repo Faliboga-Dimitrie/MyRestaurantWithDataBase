@@ -17,14 +17,14 @@ using MyRestaurant.ViewModels;
 namespace MyRestaurant.Views
 {
     /// <summary>
-    /// Interaction logic for MenuWindow.xaml
+    /// Interaction logic for ModifyMenuView.xaml
     /// </summary>
-    public partial class MenuWindow : Window
+    public partial class ModifyMenuView : Window
     {
-        public MenuWindow(Utilizatori? user)
+        public ModifyMenuView(Utilizatori user)
         {
             InitializeComponent();
-            DataContext = new FullMenuVisializationVM(user);
+            DataContext = new ModifyMenuViewModel(user);
         }
     }
 }

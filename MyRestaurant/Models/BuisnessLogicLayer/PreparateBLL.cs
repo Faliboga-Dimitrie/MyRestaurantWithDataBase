@@ -200,6 +200,8 @@ namespace MyRestaurant.Models.BuisnessLogicLayer
             var preparateWithAlergeni = context.Preparates
                 .Include(p => p.Idalergens)
                 .Include(p => p.IdcategorieNavigation)
+                .Include(p => p.Fotografis)
+                .Include(p => p.MeniuPreparats)
                 .ToList();
 
             return new ObservableCollection<Preparate>(preparateWithAlergeni);

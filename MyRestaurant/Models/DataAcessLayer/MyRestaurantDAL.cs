@@ -92,6 +92,18 @@ namespace MyRestaurant.Models.DataAcessLayer
             return (int)idParam.Value;
         }
 
+        public async Task<int> AddMeniuAsync(string name, int categoryID)
+        {
+            var nameParam = new SqlParameter("@Denumire", name);
+            var categoryParam = new SqlParameter("@IDCategorie", categoryID);
+            var idParam = new SqlParameter("@IDMeniu", SqlDbType.Int) { Direction = ParameterDirection.Output };
+
+            await Database.ExecuteSqlRawAsync("EXEC AddMeniu @Denumire, @IDCategorie, @IDMeniu OUTPUT", nameParam, categoryParam, idParam);
+
+            return (int)idParam.Value;
+        }
+
+
         public void UpdateMeniu(int categoryID, string name, int menuID)
         {
             var nameParam = new SqlParameter("@Denumire", name);
@@ -138,9 +150,19 @@ namespace MyRestaurant.Models.DataAcessLayer
         public void AddPreparatForMeniu(int menuID, int preparatID, int preparatQuantity)
         {
             var menuIDParam = new SqlParameter("@IDMeniu", menuID);
-            var preparatIDParam = new SqlParameter("@IDPreparat", preparatID);
+            var preparatIDParam = new SqlParameter("@IDPreparat", preparatID); // Fixed parameter name here
             var preparatQuantityParam = new SqlParameter("@CantitateInMeniu", preparatQuantity);
-            Database.ExecuteSqlRawAsync("EXEC AddMeniuPreparat @IDMeniu, @PIDPreparat, @CantitateInMeniu", menuIDParam, preparatIDParam, preparatQuantityParam);
+
+            Database.ExecuteSqlRawAsync(
+                "EXEC AddMeniuPreparat @IDMeniu, @IDPreparat, @CantitateInMeniu",
+                menuIDParam, preparatIDParam, preparatQuantityParam);
+        }
+
+        public void DeletePreparatForMeniu(int menuID, int preparatID)
+        {
+            var menuIDParam = new SqlParameter("@IDMeniu", menuID);
+            var preparatIDParam = new SqlParameter("@IDPreparat", preparatID);
+            Database.ExecuteSqlRawAsync("EXEC DeleteMeniuPreparat @IDMeniu, @IDPreparat", menuIDParam, preparatIDParam);
         }
 
         public void AddAlergenForPreparat(int preparatID, int alergenID)

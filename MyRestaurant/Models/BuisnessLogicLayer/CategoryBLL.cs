@@ -1,4 +1,5 @@
-﻿using MyRestaurant.Models.DataAcessLayer;
+﻿using Microsoft.EntityFrameworkCore;
+using MyRestaurant.Models.DataAcessLayer;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -97,6 +98,22 @@ namespace MyRestaurant.Models.BuisnessLogicLayer
         public ObservableCollection<Categorii> GetAllCategori()
         {
             return [.. context.Categoriis];
+        }
+
+        public ObservableCollection<Categorii> GetAllCategoriFullData()
+        {
+            var categorii = context.Categoriis
+                .Include(c => c.Preparates)
+                    .ThenInclude(p => p.Idalergens)
+                .Include(c => c.Preparates)
+                    .ThenInclude(p => p.Fotografis)
+                .Include(c => c.Meniuris)
+                    .ThenInclude(m => m.MeniuPreparats)
+                        .ThenInclude(mp => mp.IdpreparatNavigation)
+                            .ThenInclude(p => p.Idalergens)
+                .ToList();
+
+            return new ObservableCollection<Categorii>(categorii);
         }
 
     }

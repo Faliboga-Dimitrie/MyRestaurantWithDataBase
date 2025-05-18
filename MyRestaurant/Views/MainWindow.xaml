@@ -28,6 +28,7 @@
                         <MenuItem Header="Modify Preparat" Command="{Binding ModifyPreparatCommand}" />
                         <MenuItem Header="Modify Alergeni" Command="{Binding ModifyAlergeniCommand}" />
                         <MenuItem Header="Modify categorie" Command="{Binding ModifyCategorieCommand}" />
+                        <MenuItem Header="Modify Meniu" Command="{Binding ModifyMenuCommand}" />
                     </ContextMenu>
                 </Button.ContextMenu>
             </Button>
