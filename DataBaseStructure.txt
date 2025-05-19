@@ -1,0 +1,843 @@
+USE [MyRestaurant]
+GO
+/****** Object:  Table [dbo].[Alergeni]    Script Date: 19.05.2025 19:22:49 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Alergeni](
+	[IDAlergen] [int] IDENTITY(1,1) NOT NULL,
+	[NumeAlergen] [varchar](50) NOT NULL,
+ CONSTRAINT [PK_Alergeni] PRIMARY KEY CLUSTERED 
+(
+	[IDAlergen] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Categorii]    Script Date: 19.05.2025 19:22:49 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Categorii](
+	[IDCategorie] [int] IDENTITY(1,1) NOT NULL,
+	[NumeCategorie] [varchar](50) NOT NULL,
+ CONSTRAINT [PK_Categorii] PRIMARY KEY CLUSTERED 
+(
+	[IDCategorie] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[ComandaMeniu]    Script Date: 19.05.2025 19:22:49 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[ComandaMeniu](
+	[IDComanda] [int] NOT NULL,
+	[IDMeniu] [int] NOT NULL,
+	[Cantitate] [int] NOT NULL,
+ CONSTRAINT [PK_ComandaMeniu] PRIMARY KEY CLUSTERED 
+(
+	[IDComanda] ASC,
+	[IDMeniu] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[ComandaPreparat]    Script Date: 19.05.2025 19:22:49 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[ComandaPreparat](
+	[IDComanda] [int] NOT NULL,
+	[IDPreparat] [int] NOT NULL,
+	[Cantitate] [int] NOT NULL,
+ CONSTRAINT [PK_ComandaPreparat] PRIMARY KEY CLUSTERED 
+(
+	[IDComanda] ASC,
+	[IDPreparat] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Comenzi]    Script Date: 19.05.2025 19:22:49 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Comenzi](
+	[IDComanda] [int] IDENTITY(1,1) NOT NULL,
+	[CodUnic] [uniqueidentifier] NOT NULL,
+	[IDUtilizator] [int] NOT NULL,
+	[DataComanda] [datetime] NOT NULL,
+	[Stare] [varchar](20) NOT NULL,
+	[Cost] [decimal](10, 2) NOT NULL,
+ CONSTRAINT [PK_Comenzi] PRIMARY KEY CLUSTERED 
+(
+	[IDComanda] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Fotografi]    Script Date: 19.05.2025 19:22:49 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Fotografi](
+	[IDFotografie] [int] IDENTITY(1,1) NOT NULL,
+	[IDPreparat] [int] NOT NULL,
+	[Fotografie] [varbinary](max) NOT NULL,
+ CONSTRAINT [PK_Fotografi] PRIMARY KEY CLUSTERED 
+(
+	[IDFotografie] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[MeniuPreparat]    Script Date: 19.05.2025 19:22:49 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[MeniuPreparat](
+	[IDMeniu] [int] NOT NULL,
+	[IDPreparat] [int] NOT NULL,
+	[CantitateInMeniu] [int] NOT NULL,
+ CONSTRAINT [PK_MeniuPreparat] PRIMARY KEY CLUSTERED 
+(
+	[IDMeniu] ASC,
+	[IDPreparat] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Meniuri]    Script Date: 19.05.2025 19:22:49 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Meniuri](
+	[IDMeniu] [int] IDENTITY(1,1) NOT NULL,
+	[Denumire] [varchar](50) NOT NULL,
+	[IDCategorie] [int] NOT NULL,
+ CONSTRAINT [PK_Meniuri] PRIMARY KEY CLUSTERED 
+(
+	[IDMeniu] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[PreparatAlergen]    Script Date: 19.05.2025 19:22:49 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[PreparatAlergen](
+	[IDPreparat] [int] NOT NULL,
+	[IDAlergen] [int] NOT NULL,
+ CONSTRAINT [PK_PreparatAlergen] PRIMARY KEY CLUSTERED 
+(
+	[IDPreparat] ASC,
+	[IDAlergen] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Preparate]    Script Date: 19.05.2025 19:22:49 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Preparate](
+	[IDPreparat] [int] IDENTITY(1,1) NOT NULL,
+	[Denumire] [varchar](50) NOT NULL,
+	[Pret] [decimal](10, 2) NOT NULL,
+	[CantitatePortie] [int] NOT NULL,
+	[CantitateTotala] [int] NOT NULL,
+	[IDCategorie] [int] NOT NULL,
+ CONSTRAINT [PK_Preparate] PRIMARY KEY CLUSTERED 
+(
+	[IDPreparat] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Utilizatori]    Script Date: 19.05.2025 19:22:49 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Utilizatori](
+	[IDUtilizator] [int] IDENTITY(1,1) NOT NULL,
+	[Nume] [varchar](50) NOT NULL,
+	[Prenume] [varchar](50) NOT NULL,
+	[Email] [varchar](50) NOT NULL,
+	[Telefon] [nchar](10) NOT NULL,
+	[AdresaLivrare] [varchar](250) NOT NULL,
+	[Parola] [varchar](50) NOT NULL,
+	[TipUtilizator] [varchar](10) NOT NULL,
+ CONSTRAINT [PK_Utilizatori] PRIMARY KEY CLUSTERED 
+(
+	[IDUtilizator] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+ALTER TABLE [dbo].[Comenzi] ADD  CONSTRAINT [DF_Comenzi_CodUnic]  DEFAULT (newid()) FOR [CodUnic]
+GO
+ALTER TABLE [dbo].[ComandaMeniu]  WITH CHECK ADD  CONSTRAINT [FK_ComandaMeniu_Comanda] FOREIGN KEY([IDComanda])
+REFERENCES [dbo].[Comenzi] ([IDComanda])
+GO
+ALTER TABLE [dbo].[ComandaMeniu] CHECK CONSTRAINT [FK_ComandaMeniu_Comanda]
+GO
+ALTER TABLE [dbo].[ComandaMeniu]  WITH CHECK ADD  CONSTRAINT [FK_ComandaMeniu_Meniu] FOREIGN KEY([IDMeniu])
+REFERENCES [dbo].[Meniuri] ([IDMeniu])
+GO
+ALTER TABLE [dbo].[ComandaMeniu] CHECK CONSTRAINT [FK_ComandaMeniu_Meniu]
+GO
+ALTER TABLE [dbo].[ComandaPreparat]  WITH CHECK ADD  CONSTRAINT [FK_ComandaPreparat_Comanda] FOREIGN KEY([IDComanda])
+REFERENCES [dbo].[Comenzi] ([IDComanda])
+GO
+ALTER TABLE [dbo].[ComandaPreparat] CHECK CONSTRAINT [FK_ComandaPreparat_Comanda]
+GO
+ALTER TABLE [dbo].[ComandaPreparat]  WITH CHECK ADD  CONSTRAINT [FK_ComandaPreparat_Preparat] FOREIGN KEY([IDPreparat])
+REFERENCES [dbo].[Preparate] ([IDPreparat])
+GO
+ALTER TABLE [dbo].[ComandaPreparat] CHECK CONSTRAINT [FK_ComandaPreparat_Preparat]
+GO
+ALTER TABLE [dbo].[Comenzi]  WITH CHECK ADD  CONSTRAINT [FK_Comenzi_Utilizator] FOREIGN KEY([IDUtilizator])
+REFERENCES [dbo].[Utilizatori] ([IDUtilizator])
+GO
+ALTER TABLE [dbo].[Comenzi] CHECK CONSTRAINT [FK_Comenzi_Utilizator]
+GO
+ALTER TABLE [dbo].[Fotografi]  WITH CHECK ADD  CONSTRAINT [FK_Fotografi_Preparate] FOREIGN KEY([IDPreparat])
+REFERENCES [dbo].[Preparate] ([IDPreparat])
+GO
+ALTER TABLE [dbo].[Fotografi] CHECK CONSTRAINT [FK_Fotografi_Preparate]
+GO
+ALTER TABLE [dbo].[MeniuPreparat]  WITH CHECK ADD  CONSTRAINT [FK_MeniuPreparat_Meniu] FOREIGN KEY([IDMeniu])
+REFERENCES [dbo].[Meniuri] ([IDMeniu])
+GO
+ALTER TABLE [dbo].[MeniuPreparat] CHECK CONSTRAINT [FK_MeniuPreparat_Meniu]
+GO
+ALTER TABLE [dbo].[MeniuPreparat]  WITH CHECK ADD  CONSTRAINT [FK_MeniuPreparat_Preparate] FOREIGN KEY([IDPreparat])
+REFERENCES [dbo].[Preparate] ([IDPreparat])
+GO
+ALTER TABLE [dbo].[MeniuPreparat] CHECK CONSTRAINT [FK_MeniuPreparat_Preparate]
+GO
+ALTER TABLE [dbo].[Meniuri]  WITH CHECK ADD  CONSTRAINT [FK_Meniuri_Categorii] FOREIGN KEY([IDCategorie])
+REFERENCES [dbo].[Categorii] ([IDCategorie])
+GO
+ALTER TABLE [dbo].[Meniuri] CHECK CONSTRAINT [FK_Meniuri_Categorii]
+GO
+ALTER TABLE [dbo].[PreparatAlergen]  WITH CHECK ADD  CONSTRAINT [FK_PreparatAlergen_Alergeni] FOREIGN KEY([IDAlergen])
+REFERENCES [dbo].[Alergeni] ([IDAlergen])
+GO
+ALTER TABLE [dbo].[PreparatAlergen] CHECK CONSTRAINT [FK_PreparatAlergen_Alergeni]
+GO
+ALTER TABLE [dbo].[PreparatAlergen]  WITH CHECK ADD  CONSTRAINT [FK_PreparatAlergen_Preparat] FOREIGN KEY([IDPreparat])
+REFERENCES [dbo].[Preparate] ([IDPreparat])
+GO
+ALTER TABLE [dbo].[PreparatAlergen] CHECK CONSTRAINT [FK_PreparatAlergen_Preparat]
+GO
+ALTER TABLE [dbo].[Preparate]  WITH CHECK ADD  CONSTRAINT [FK_Preparate_Categorii] FOREIGN KEY([IDCategorie])
+REFERENCES [dbo].[Categorii] ([IDCategorie])
+GO
+ALTER TABLE [dbo].[Preparate] CHECK CONSTRAINT [FK_Preparate_Categorii]
+GO
+ALTER TABLE [dbo].[Comenzi]  WITH CHECK ADD  CONSTRAINT [CHK_Stare_Comanda] CHECK  (([Stare]='Anulata' OR [Stare]='Livrata' OR [Stare]='A plecat' OR [Stare]='Se pregateste' OR [Stare]='Inregistrata'))
+GO
+ALTER TABLE [dbo].[Comenzi] CHECK CONSTRAINT [CHK_Stare_Comanda]
+GO
+ALTER TABLE [dbo].[Utilizatori]  WITH CHECK ADD  CONSTRAINT [CK_User_Tip] CHECK  (([TipUtilizator]='Angajat' OR [TipUtilizator]='Client'))
+GO
+ALTER TABLE [dbo].[Utilizatori] CHECK CONSTRAINT [CK_User_Tip]
+GO
+/****** Object:  StoredProcedure [dbo].[AddAlergen]    Script Date: 19.05.2025 19:22:49 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE PROCEDURE [dbo].[AddAlergen]
+    @IDAlergen INT,
+    @NumeAlergen VARCHAR(50)
+AS
+BEGIN
+    INSERT INTO Alergeni(NumeAlergen)
+    VALUES (@NumeAlergen);
+
+	SET @IDAlergen = SCOPE_IDENTITY();
+END;
+
+
+GO
+/****** Object:  StoredProcedure [dbo].[AddCategorie]    Script Date: 19.05.2025 19:22:49 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE PROCEDURE [dbo].[AddCategorie]
+    @IDCategorie INT,
+    @NumeCategorie VARCHAR(50)
+AS
+BEGIN
+    INSERT INTO Categorii(NumeCategorie)
+    VALUES (@NumeCategorie);
+
+	SET @IDCategorie = SCOPE_IDENTITY();
+END;
+
+
+GO
+/****** Object:  StoredProcedure [dbo].[AddComanda]    Script Date: 19.05.2025 19:22:49 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE PROCEDURE [dbo].[AddComanda]
+    @CodUnic UNIQUEIDENTIFIER,
+    @IDUtilizator INT,
+    @DataComanda DATETIME,
+    @Stare VARCHAR(20),
+    @Cost DECIMAL(10,2),
+    @IDComanda INT OUTPUT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    INSERT INTO Comenzi (CodUnic, IDUtilizator, DataComanda, Stare, Cost)
+    VALUES (@CodUnic, @IDUtilizator, @DataComanda, @Stare, @Cost);
+
+    SET @IDComanda = SCOPE_IDENTITY();
+END
+GO
+/****** Object:  StoredProcedure [dbo].[AddComandaMeniu]    Script Date: 19.05.2025 19:22:49 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE PROCEDURE [dbo].[AddComandaMeniu]
+    @ComandaID INT,
+    @MeniuID INT,
+    @Cantitate INT
+AS
+BEGIN
+    INSERT INTO ComandaMeniu (IDComanda, IDMeniu, Cantitate)
+    VALUES (@ComandaID, @MeniuID, @Cantitate);
+END;
+
+
+GO
+/****** Object:  StoredProcedure [dbo].[AddComandaPreparat]    Script Date: 19.05.2025 19:22:49 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE PROCEDURE [dbo].[AddComandaPreparat]
+    @ComandaID INT,
+    @PreparatID INT,
+    @Cantitate INT
+AS
+BEGIN
+    INSERT INTO ComandaPreparat (IDComanda, IDPreparat, Cantitate)
+    VALUES (@ComandaID, @PreparatID, @Cantitate);
+END;
+
+GO
+/****** Object:  StoredProcedure [dbo].[AddFotografie]    Script Date: 19.05.2025 19:22:49 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE PROCEDURE [dbo].[AddFotografie]
+    @IDFotografie INT,
+	@IDPreparat INT,
+	@Fotografie VARBINARY(MAX)
+AS
+BEGIN
+    INSERT INTO Fotografi(IDPreparat, Fotografie)
+    VALUES (@IDPreparat, @Fotografie);
+
+	SET @IDFotografie = SCOPE_IDENTITY();
+END;
+
+
+GO
+/****** Object:  StoredProcedure [dbo].[AddMeniu]    Script Date: 19.05.2025 19:22:49 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE PROCEDURE [dbo].[AddMeniu]
+    @Denumire VARCHAR(50),
+    @IDCategorie INT,
+    @IDMeniu INT OUTPUT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    INSERT INTO Meniuri (Denumire, IDCategorie)
+    VALUES (@Denumire, @IDCategorie);
+
+    SET @IDMeniu = SCOPE_IDENTITY();
+END
+
+GO
+/****** Object:  StoredProcedure [dbo].[AddMeniuPreparat]    Script Date: 19.05.2025 19:22:49 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE PROCEDURE [dbo].[AddMeniuPreparat]
+    @IDMeniu INT,
+    @IDPreparat INT,
+    @CantitateInMeniu INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+    INSERT INTO MeniuPreparat (IDMeniu, IDPreparat, CantitateInMeniu)
+    VALUES (@IDMeniu, @IDPreparat, @CantitateInMeniu);
+END
+GO
+/****** Object:  StoredProcedure [dbo].[AddPreparatAlergen]    Script Date: 19.05.2025 19:22:49 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE PROCEDURE [dbo].[AddPreparatAlergen]
+	@IDPreparat INT,
+    @IDAlergen INT
+AS
+BEGIN
+    INSERT INTO PreparatAlergen(IDPreparat,IDAlergen)
+    VALUES (@IDPreparat, @IDAlergen);
+END;
+
+
+GO
+/****** Object:  StoredProcedure [dbo].[AddPreparate]    Script Date: 19.05.2025 19:22:49 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE PROCEDURE [dbo].[AddPreparate]
+    @Denumire VARCHAR(50),
+    @Pret DECIMAL(10,2),
+    @CantitatePortie INT,
+    @CantitateTotala INT,
+    @IDCategorie INT,
+    @IDPreparat INT OUTPUT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    INSERT INTO Preparate (Denumire, Pret, CantitatePortie, CantitateTotala, IDCategorie)
+    VALUES (@Denumire, @Pret, @CantitatePortie, @CantitateTotala, @IDCategorie);
+
+    SET @IDPreparat = SCOPE_IDENTITY();
+END
+GO
+/****** Object:  StoredProcedure [dbo].[AddUtilizator]    Script Date: 19.05.2025 19:22:49 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE PROCEDURE [dbo].[AddUtilizator]
+    @Nume VARCHAR(50),
+    @Prenume VARCHAR(50),
+    @Email VARCHAR(50),
+    @Telefon NCHAR(10),
+    @AdresaLivrare VARCHAR(250),
+    @Parola VARCHAR(50),
+    @TipUtilizator VARCHAR(10),
+    @IDUtilizator INT OUTPUT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    INSERT INTO Utilizatori (Nume, Prenume, Email, Telefon, AdresaLivrare, Parola, TipUtilizator)
+    VALUES (@Nume, @Prenume, @Email, @Telefon, @AdresaLivrare, @Parola, @TipUtilizator);
+
+    SET @IDUtilizator = SCOPE_IDENTITY();
+END
+
+GO
+/****** Object:  StoredProcedure [dbo].[CalculeazaPretComanda]    Script Date: 19.05.2025 19:22:49 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE PROCEDURE [dbo].[CalculeazaPretComanda]
+    @IDComanda INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    DECLARE @PretPreparat DECIMAL(10,2) = 0;
+    DECLARE @PretMeniu DECIMAL(10,2) = 0;
+    DECLARE @Total DECIMAL(10,2) = 0;
+
+    -- 1. Suma pentru preparatele comandate individual
+    SELECT @PretPreparat = ISNULL(SUM(cp.Cantitate * p.Pret), 0)
+    FROM ComandaPreparat cp
+    INNER JOIN Preparate p ON cp.IDPreparat = p.IDPreparat
+    WHERE cp.IDComanda = @IDComanda;
+
+    -- 2. Suma pentru meniurile comandate (fiecare meniu = suma preparatelor sale * cantitatea meniului in comanda)
+    SELECT @PretMeniu = ISNULL(SUM(cm.Cantitate * mp.PretMeniu), 0)
+    FROM ComandaMeniu cm
+    CROSS APPLY (
+        SELECT SUM(mp.CantitateInMeniu * p.Pret) AS PretMeniu
+        FROM MeniuPreparat mp
+        INNER JOIN Preparate p ON mp.IDPreparat = p.IDPreparat
+        WHERE mp.IDMeniu = cm.IDMeniu
+    ) mp
+    WHERE cm.IDComanda = @IDComanda;
+
+    SET @Total = @PretPreparat + @PretMeniu;
+
+    -- 3. Update Cost in Comenzi
+    UPDATE Comenzi
+    SET Cost = @Total
+    WHERE IDComanda = @IDComanda;
+
+    -- 4. Return the calculated total
+    SELECT @Total AS PretTotal;
+END
+
+GO
+/****** Object:  StoredProcedure [dbo].[DeleteAlergeni]    Script Date: 19.05.2025 19:22:49 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE PROCEDURE [dbo].[DeleteAlergeni]
+    @IDAlergen INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+    BEGIN TRANSACTION;
+
+    BEGIN TRY
+        -- Delete dependent records in MeniuPreparat
+        DELETE FROM PreparatAlergen WHERE IDAlergen = @IDAlergen;
+
+        -- Delete the Preparat record
+        DELETE FROM Alergeni WHERE IDAlergen = @IDAlergen;
+
+        COMMIT TRANSACTION;
+    END TRY
+    BEGIN CATCH
+        ROLLBACK TRANSACTION;
+        THROW;
+    END CATCH
+END
+
+
+
+GO
+/****** Object:  StoredProcedure [dbo].[DeleteCategorii]    Script Date: 19.05.2025 19:22:49 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE PROCEDURE [dbo].[DeleteCategorii]
+    @IDCategorie INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+    BEGIN TRANSACTION;
+
+    BEGIN TRY
+        -- Delete dependent records in Meniuri
+        DELETE FROM Meniuri WHERE IDCategorie = @IDCategorie;
+
+		-- Delete dependent records in Preparate
+        DELETE FROM Preparate WHERE IDCategorie = @IDCategorie;
+
+        -- Delete the Preparat record
+        DELETE FROM Categorii WHERE IDCategorie = @IDCategorie;
+
+        COMMIT TRANSACTION;
+    END TRY
+    BEGIN CATCH
+        ROLLBACK TRANSACTION;
+        THROW;
+    END CATCH
+END
+
+
+
+GO
+/****** Object:  StoredProcedure [dbo].[DeleteMeniuFromComanda]    Script Date: 19.05.2025 19:22:49 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE PROCEDURE [dbo].[DeleteMeniuFromComanda]
+    @IDComanda INT,
+    @IDMeniu INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    DELETE FROM ComandaMeniu
+    WHERE IDComanda = @IDComanda
+      AND IDMeniu = @IDMeniu;
+END
+GO
+/****** Object:  StoredProcedure [dbo].[DeleteMeniuPreparat]    Script Date: 19.05.2025 19:22:49 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE PROCEDURE [dbo].[DeleteMeniuPreparat]
+    @IDMeniu INT,
+    @IDPreparat INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+    
+    DELETE FROM MeniuPreparat 
+    WHERE IDMeniu = @IDMeniu 
+      AND IDPreparat = @IDPreparat;
+END
+GO
+/****** Object:  StoredProcedure [dbo].[DeleteMeniuri]    Script Date: 19.05.2025 19:22:49 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE PROCEDURE [dbo].[DeleteMeniuri]
+    @IDMeniu INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+    BEGIN TRANSACTION;
+
+    BEGIN TRY
+        -- Delete dependent records in MeniuPreparat
+        DELETE FROM MeniuPreparat WHERE IDMeniu = @IDMeniu;
+
+		-- Delete dependent records in ComandaMeniu
+        DELETE FROM ComandaMeniu WHERE IDMeniu = @IDMeniu;
+
+        -- Delete the Preparat record
+        DELETE FROM Meniuri WHERE IDMeniu = @IDMeniu;
+
+        COMMIT TRANSACTION;
+    END TRY
+    BEGIN CATCH
+        ROLLBACK TRANSACTION;
+        THROW;
+    END CATCH
+END
+
+
+
+GO
+/****** Object:  StoredProcedure [dbo].[DeletePreparat]    Script Date: 19.05.2025 19:22:49 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE PROCEDURE [dbo].[DeletePreparat]
+    @IDPreparat INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+    BEGIN TRANSACTION;
+
+    BEGIN TRY
+        -- Delete dependent records in PreparatAlergen
+        DELETE FROM PreparatAlergen WHERE IDPreparat = @IDPreparat;
+
+        -- Delete dependent records in ComandaPreparat
+        DELETE FROM ComandaPreparat WHERE IDPreparat = @IDPreparat;
+
+		-- Delete dependent records in Fotografii
+		DELETE FROM Fotografi WHERE IDPreparat = @IDPreparat;
+
+		-- Delete dependent records in MeniuPreparat
+		DELETE FROM MeniuPreparat WHERE IDPreparat = @IDPreparat;
+
+        -- Delete the Preparat record
+        DELETE FROM Preparate WHERE IDPreparat = @IDPreparat;
+
+        COMMIT TRANSACTION;
+    END TRY
+    BEGIN CATCH
+        ROLLBACK TRANSACTION;
+        THROW;
+    END CATCH
+END
+
+
+
+GO
+/****** Object:  StoredProcedure [dbo].[DeletePreparatFromComanda]    Script Date: 19.05.2025 19:22:49 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE PROCEDURE [dbo].[DeletePreparatFromComanda]
+    @IDComanda INT,
+    @IDPreparat INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    DELETE FROM ComandaPreparat
+    WHERE IDComanda = @IDComanda
+      AND IDPreparat = @IDPreparat;
+END
+GO
+/****** Object:  StoredProcedure [dbo].[UpdateAlergeni]    Script Date: 19.05.2025 19:22:49 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE PROCEDURE [dbo].[UpdateAlergeni]
+    @IDAlergen INT,
+    @NumeAlergen varchar(50)
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    UPDATE Alergeni
+    SET 
+        NumeAlergen = @NumeAlergen
+    WHERE IDAlergen = @IDAlergen;
+END
+
+
+
+GO
+/****** Object:  StoredProcedure [dbo].[UpdateCategorii]    Script Date: 19.05.2025 19:22:49 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE PROCEDURE [dbo].[UpdateCategorii]
+    @IDCategorie INT,
+    @NumeCategorie varchar(50)
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    UPDATE Categorii
+    SET 
+        NumeCategorie = @NumeCategorie
+    WHERE IDCategorie = @IDCategorie;
+END
+
+
+
+GO
+/****** Object:  StoredProcedure [dbo].[UpdateComandaStatus]    Script Date: 19.05.2025 19:22:49 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE PROCEDURE [dbo].[UpdateComandaStatus]
+    @IDComanda INT,
+    @Status VARCHAR(20)
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    UPDATE Comenzi
+    SET Stare = @Status
+    WHERE IDComanda = @IDComanda;
+END
+
+GO
+/****** Object:  StoredProcedure [dbo].[UpdateMeniuri]    Script Date: 19.05.2025 19:22:49 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE PROCEDURE [dbo].[UpdateMeniuri]
+    @IDCategorie INT,
+    @Denumire varchar(50),
+	@IDMeniu INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    UPDATE Meniuri
+    SET 
+        Denumire = @Denumire,
+		IDCategorie = @IDCategorie
+    WHERE IDMeniu = @IDMeniu;
+END
+
+
+
+GO
+/****** Object:  StoredProcedure [dbo].[UpdatePreparat]    Script Date: 19.05.2025 19:22:49 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE PROCEDURE [dbo].[UpdatePreparat]
+    @IDPreparat INT,
+    @Denumire varchar(50),
+    @IDCategorie INT,
+    @Pret DECIMAL(10,2),
+    @CantitatePortie INT,
+	@CantitateTotala INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    UPDATE Preparate
+    SET 
+        Denumire = @Denumire,
+        IDCategorie = @IDCategorie,
+        Pret = @Pret,
+        CantitatePortie = @CantitatePortie,
+		CantitateTotala = @CantitateTotala
+    WHERE IDPreparat = @IDPreparat;
+END
+
+
+
+GO
+/****** Object:  StoredProcedure [dbo].[UpdatePretComandaDirect]    Script Date: 19.05.2025 19:22:49 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE PROCEDURE [dbo].[UpdatePretComandaDirect]
+    @IDComanda INT,
+    @PretNou DECIMAL(10, 2)
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    UPDATE Comenzi
+    SET Cost = @PretNou
+    WHERE IDComanda = @IDComanda;
+END
+
+GO
