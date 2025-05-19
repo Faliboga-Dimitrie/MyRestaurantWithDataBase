@@ -14,13 +14,6 @@ using System.Windows;
 
 namespace MyRestaurant.ViewModels
 {
-    public class CategoryDisplay
-    {
-        public string NumeCategorie { get; set; }
-        public ObservableCollection<Preparate> Preparates { get; set; }
-        public ObservableCollection<Meniuri> Meniuris { get; set; }
-    }
-
     public class FullMenuVisializationVM : BasePropertyChanged
     {
         private PreparateBLL _preparateBLL;

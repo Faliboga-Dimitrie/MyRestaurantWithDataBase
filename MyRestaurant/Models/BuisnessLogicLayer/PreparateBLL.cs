@@ -74,7 +74,7 @@ namespace MyRestaurant.Models.BuisnessLogicLayer
             }
         }
 
-        public void UpdateMethode(object obj, List<Alergeni> selectedAlergeni)
+        public void UpdateMethode(object obj, List<Alergeni>? selectedAlergeni)
         {
             Preparate preparate = obj as Preparate;
             if (preparate != null)
@@ -111,18 +111,9 @@ namespace MyRestaurant.Models.BuisnessLogicLayer
                 {
                     try
                     {
-                        //context.Entry(preparate).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
-                        //context.SaveChanges();
-                        //context.UpdatePreparate(preparate.Idpreparat, preparate.Denumire, preparate.Pret, preparate.CantitatePortie, preparate.CantitateTotala, preparate.Idcategorie);
-                        //ErrorMessage = string.Empty;
-                        // Attach preparat to context if not tracked
                         var existingPreparat = context.Preparates
                             .Include(p => p.Idalergens)
                             .FirstOrDefault(p => p.Idpreparat == preparate.Idpreparat);
-
-                        var existingAlergeni = context.Alergenis
-                    .Where(a => selectedAlergeni.Select(sa => sa.Idalergen).Contains(a.Idalergen))
-                    .ToList();
 
                         if (existingPreparat != null)
                         {
@@ -133,11 +124,17 @@ namespace MyRestaurant.Models.BuisnessLogicLayer
                             existingPreparat.CantitateTotala = preparate.CantitateTotala;
                             existingPreparat.Idcategorie = preparate.Idcategorie;
 
-                            // Update allergens
-                            existingPreparat.Idalergens.Clear();
-                            foreach (var alergen in existingAlergeni)
+                            if(selectedAlergeni != null)
                             {
-                                existingPreparat.Idalergens.Add(alergen);
+                                var existingAlergeni = context.Alergenis
+                            .Where(a => selectedAlergeni.Select(sa => sa.Idalergen).Contains(a.Idalergen))
+                            .ToList();
+                                // Update allergens
+                                existingPreparat.Idalergens.Clear();
+                                foreach (var alergen in existingAlergeni)
+                                {
+                                    existingPreparat.Idalergens.Add(alergen);
+                                }
                             }
 
                             context.SaveChanges();

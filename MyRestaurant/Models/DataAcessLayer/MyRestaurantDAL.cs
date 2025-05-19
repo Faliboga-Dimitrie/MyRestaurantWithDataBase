@@ -12,11 +12,12 @@ namespace MyRestaurant.Models.DataAcessLayer
     public class MyRestaurantDAL : MyRestaurantContext
     {
         #region CRUD Operations
-        public int AddAlergen(string alergenName)
+
+        public async Task<int> AddAlergenAsync(string alergenName)
         {
             var nameParam = new SqlParameter("@NumeAlergen", alergenName);
             var idParam = new SqlParameter("@IDAlergen", SqlDbType.Int) { Direction = ParameterDirection.Output };
-            Database.ExecuteSqlRawAsync("EXEC AddAlergen @IDAlergen OUTPUT, @NumeAlergen", idParam, nameParam);
+            await Database.ExecuteSqlRawAsync("EXEC AddAlergen @IDAlergen OUTPUT, @NumeAlergen", idParam, nameParam);
             return (int)idParam.Value;
         }
 
@@ -33,11 +34,11 @@ namespace MyRestaurant.Models.DataAcessLayer
             Database.ExecuteSqlRawAsync("EXEC DeleteAlergeni @IDAlergen", idParam);
         }
 
-        public int AddCategorie(string categorieName)
+        public async Task<int> AddCategorieAsync(string categorieName)
         {
             var nameParam = new SqlParameter("@NumeCategorie", categorieName);
             var idParam = new SqlParameter("@IDCategorie", SqlDbType.Int) { Direction = ParameterDirection.Output };
-            Database.ExecuteSqlRawAsync("EXEC AddCategorie @IDCategorie OUTPUT, @NumeCategorie", idParam, nameParam);
+            await Database.ExecuteSqlRawAsync("EXEC AddCategorie @IDCategorie OUTPUT, @NumeCategorie", idParam, nameParam);
             return (int)idParam.Value;
         }
 
@@ -54,7 +55,7 @@ namespace MyRestaurant.Models.DataAcessLayer
             Database.ExecuteSqlRawAsync("EXEC DeleteCategorii @IDCategorie", idParam);
         }
 
-        public int AddPreparate(string name, decimal price, int quantityPerPortion, int TotalQuantity, int categoryID)
+        public async Task<int> AddPreparateAsync(string name, decimal price, int quantityPerPortion, int TotalQuantity, int categoryID)
         {
             var nameParam = new SqlParameter("@Denumire", name);
             var priceParam = new SqlParameter("@Pret", price);
@@ -62,7 +63,7 @@ namespace MyRestaurant.Models.DataAcessLayer
             var totalQuantityParam = new SqlParameter("@CantitateTotala", TotalQuantity);
             var categoryParam = new SqlParameter("@IDCategorie", categoryID);
             var idParam = new SqlParameter("@IDPreparat", SqlDbType.Int) { Direction = ParameterDirection.Output };
-            Database.ExecuteSqlRawAsync("EXEC AddPreparate @Denumire, @Pret, @CantitatePortie, @CantitateTotala, @IDCategorie, @IDPreparat OUTPUT", nameParam, priceParam, quantityPerPortionParam, totalQuantityParam, categoryParam, idParam);
+            await Database.ExecuteSqlRawAsync("EXEC AddPreparate @Denumire, @Pret, @CantitatePortie, @CantitateTotala, @IDCategorie, @IDPreparat OUTPUT", nameParam, priceParam, quantityPerPortionParam, totalQuantityParam, categoryParam, idParam);
             return (int)idParam.Value;
         }
 
@@ -81,15 +82,6 @@ namespace MyRestaurant.Models.DataAcessLayer
         {
             var idParam = new SqlParameter("@IDPreparat", preparatID);
             Database.ExecuteSqlRawAsync("EXEC DeletePreparat @IDPreparat", idParam);
-        }
-
-        public int AddMeniu(string name, int categoryID)
-        {
-            var nameParam = new SqlParameter("@Denumire", name);
-            var categoryParam = new SqlParameter("@IDCategorie", categoryID);
-            var idParam = new SqlParameter("@IDMeniu", SqlDbType.Int) { Direction = ParameterDirection.Output };
-            Database.ExecuteSqlRawAsync("EXEC AddMeniu @Denumire, @IDCategorie, @IDMeniu OUTPUT", nameParam, categoryParam, idParam);
-            return (int)idParam.Value;
         }
 
         public async Task<int> AddMeniuAsync(string name, int categoryID)
@@ -119,7 +111,8 @@ namespace MyRestaurant.Models.DataAcessLayer
         }
 
         #endregion
-        public int AddComanda(Guid uniqueCode, int userID, DateTime orderDate, string status, decimal cost)
+
+        public async Task<int> AddComandaAsync(Guid uniqueCode, int userID, DateTime orderDate, string status, decimal cost)
         {
             var codeParam = new SqlParameter("@CodUnic", uniqueCode);
             var userParam = new SqlParameter("@IDUtilizator", userID);
@@ -127,24 +120,62 @@ namespace MyRestaurant.Models.DataAcessLayer
             var statusParam = new SqlParameter("@Stare", status);
             var costParam = new SqlParameter("@Cost", cost);
             var idParam = new SqlParameter("@IDComanda", SqlDbType.Int) { Direction = ParameterDirection.Output };
-            Database.ExecuteSqlRawAsync("EXEC AddComanda @CodUnic, @IDUtilizator, @DataComanda, @Stare, @Cost, @IDComanda OUTPUT", codeParam, userParam, dateParam, statusParam, costParam, idParam);
+            await Database.ExecuteSqlRawAsync("EXEC AddComanda @CodUnic, @IDUtilizator, @DataComanda, @Stare, @Cost, @IDComanda OUTPUT", codeParam, userParam, dateParam, statusParam, costParam, idParam);
             return (int)idParam.Value;
         }
 
-        public void AddMeniuForComanda(int orderID, int menuID, int quantity)
+        public async Task AddMeniuForComandaAsync(int orderID, int menuID, int quantity)
         {
             var orderParam = new SqlParameter("@ComandaID", orderID);
             var menuParam = new SqlParameter("@MeniuID", menuID);
             var quantityParam = new SqlParameter("@Cantitate", quantity);
-            Database.ExecuteSqlRawAsync("EXEC AddComandaMeniu @ComandaID, @MeniuID, @Cantitate", orderParam, menuParam, quantityParam);
+            await Database.ExecuteSqlRawAsync("EXEC AddComandaMeniu @ComandaID, @MeniuID, @Cantitate", orderParam, menuParam, quantityParam);
         }
 
-        public void AddPreparatForComanda(int orderID, int preparatID, int quantity)
+        public void DeleteMeniuForComanda(int orderID, int menuID)
+        {
+            var orderParam = new SqlParameter("@IDComanda", orderID);
+            var menuParam = new SqlParameter("@IDMeniu", menuID);
+            Database.ExecuteSqlRawAsync("EXEC DeleteMeniuFromComanda @IDComanda, @IDMeniu", orderParam, menuParam);
+        }
+
+        public async Task AddPreparatForComandaAsync(int orderID, int preparatID, int quantity)
         {
             var orderParam = new SqlParameter("@ComandaID", orderID);
             var preparatParam = new SqlParameter("@PreparatID", preparatID);
             var quantityParam = new SqlParameter("@Cantitate", quantity);
-            Database.ExecuteSqlRawAsync("EXEC AddComandaPreparat @ComandaID, @PreparatID, @Cantitate", orderParam, preparatParam, quantityParam);
+            await Database.ExecuteSqlRawAsync("EXEC AddComandaPreparat @ComandaID, @PreparatID, @Cantitate", orderParam, preparatParam, quantityParam);
+        }
+
+        public void DeletePreparatForComanda(int orderID, int preparatID)
+        {
+            var orderParam = new SqlParameter("@IDComanda", orderID);
+            var preparatParam = new SqlParameter("@IDPreparat", preparatID);
+            Database.ExecuteSqlRawAsync("EXEC DeletePreparatFromComanda @IDComanda, @IDPreparat", orderParam, preparatParam);
+        }
+
+        public async Task<decimal> CalculeazaPretComandaAsync(int idComanda)
+        {
+            var idComandaParam = new SqlParameter("@IDComanda", idComanda);
+
+            var result = await Database.SqlQueryRaw<decimal>(
+                "EXEC CalculeazaPretComanda @IDComanda", idComandaParam).ToListAsync();
+
+            return result.FirstOrDefault();
+        }
+
+        public void UpdateComandaStare(int orderID, string status)
+        {
+            var orderIDParam = new SqlParameter("@IDComanda", orderID);
+            var statusParam = new SqlParameter("@Stare", status);
+            Database.ExecuteSqlRawAsync("EXEC UpdateComandaStatus @IDComanda, @Stare", orderIDParam, statusParam);
+        }
+
+        public void UpdateComandaCost(int orderID, decimal cost)
+        {
+            var orderIDParam = new SqlParameter("@IDComanda", orderID);
+            var costParam = new SqlParameter("@PretNou", cost);
+            Database.ExecuteSqlRawAsync("EXEC UpdatePretComandaDirect @IDComanda, @PretNou", orderIDParam, costParam);
         }
 
         public void AddPreparatForMeniu(int menuID, int preparatID, int preparatQuantity)
@@ -172,7 +203,7 @@ namespace MyRestaurant.Models.DataAcessLayer
             Database.ExecuteSqlRawAsync("EXEC AddPreparatAlergen @IDPreparat, @IDAlergen", preparatIDParam, alergenIDParam);
         }
 
-        public int AddUtilizator(string firstName, string lastName, string email, string phone, string deliveryAddress, string password, string type)
+        public async Task<int> AddUtilizatorAsync(string firstName, string lastName, string email, string phone, string deliveryAddress, string password, string type)
         {
             var firstNameParam = new SqlParameter("@Nume", firstName);
             var lastNameParam = new SqlParameter("@Prenume", lastName);
@@ -182,7 +213,7 @@ namespace MyRestaurant.Models.DataAcessLayer
             var passwordParam = new SqlParameter("@Parola", password);
             var typeParam = new SqlParameter("@TipUtilizator", type);
             var idParam = new SqlParameter("@IDUtilizator", SqlDbType.Int) { Direction = ParameterDirection.Output };
-            Database.ExecuteSqlRawAsync("EXEC AddUtilizator @Nume, @Prenume, @Email, @Telefon, @AdresaLivrare, @Parola, @TipUtilizator, @IDUtilizator OUTPUT", firstNameParam, lastNameParam, emailParam, phoneParam, deliveryAddressParam, passwordParam, typeParam, idParam);
+            await Database.ExecuteSqlRawAsync("EXEC AddUtilizator @Nume, @Prenume, @Email, @Telefon, @AdresaLivrare, @Parola, @TipUtilizator, @IDUtilizator OUTPUT", firstNameParam, lastNameParam, emailParam, phoneParam, deliveryAddressParam, passwordParam, typeParam, idParam);
             return (int)idParam.Value;
         }
     }

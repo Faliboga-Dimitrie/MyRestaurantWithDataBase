@@ -1,0 +1,54 @@
+﻿<Window x:Class="MyRestaurant.Views.ViewOrdersView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:MyRestaurant.Views"
+        xmlns:converters="clr-namespace:MyRestaurant.Convertors"
+        Title="Vizualizare Comenzi" Height="600" Width="900">
+
+    <Window.Resources>
+        <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+    </Window.Resources>
+
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Error Message -->
+        <TextBlock Text="{Binding ErrorMessage}" 
+                   Foreground="Red" 
+                   FontWeight="Bold" 
+                   Visibility="{Binding ErrorMessage, Converter={StaticResource BoolToVisibilityConverter}}"
+                   Margin="0,0,0,10"/>
+
+        <!-- Orders Table -->
+        <DataGrid Grid.Row="1" 
+                  ItemsSource="{Binding OrdersList}" 
+                  SelectedItem="{Binding SelectedOrder}" 
+                  AutoGenerateColumns="False" 
+                  IsReadOnly="True" 
+                  Margin="0,10,0,10">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Cod Unic" Binding="{Binding CodUnic}" Width="*"/>
+                <DataGridTextColumn Header="Client" Binding="{Binding IdutilizatorNavigation.Nume}" Width="*"/>
+                <DataGridTextColumn Header="Data" Binding="{Binding DataComanda}" Width="*"/>
+                <DataGridTextColumn Header="Stare" Binding="{Binding Stare}" Width="*"/>
+                <DataGridTextColumn Header="Cost" Binding="{Binding Cost}" Width="Auto"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <!-- Status Change Section (Visible only to employees) -->
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,20,0,0"
+                    Visibility="{Binding IsEmployee, Converter={StaticResource BoolToVisibilityConverter}}">
+            <TextBlock Text="Schimba Status:" VerticalAlignment="Center" Margin="0,0,10,0"/>
+            <ComboBox Width="150" ItemsSource="{Binding OrderStatuses}" 
+                      SelectedItem="{Binding SelectedOrderStatus}" Margin="0,0,10,0"/>
+            <Button Content="Schimba" Command="{Binding ChangeOrderStatus}" Width="100"/>
+        </StackPanel>
+
+        <!-- Back Button -->
+        <Button Grid.Row="2" Content="Inapoi" Command="{Binding BackToMain}" HorizontalAlignment="Left" Margin="0,20,0,0"/>
+    </Grid>
+</Window>

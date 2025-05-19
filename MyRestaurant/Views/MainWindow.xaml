@@ -17,7 +17,7 @@
         <StackPanel Orientation="Horizontal" DockPanel.Dock="Top" Margin="10" HorizontalAlignment="Center" >
             <Button Content="View Menu" Command="{Binding ShowViewMenuCommand}" Margin="5" Width="100" />
             <Button Content="Place Order" Command="{Binding ShowPlaceOrderCommand}" Margin="5" Width="100" />
-            <Button Content="View Orders" Command="{Binding ShowMyOrdersCommand}" Margin="5" Width="100" />
+            <Button Content="View Orders" Command="{Binding ShowOrdersCommand}" Margin="5" Width="100" />
 
             <!-- Visible only to employees -->
             <!-- Replace your existing Edit Menu button with this -->
@@ -33,7 +33,7 @@
                 </Button.ContextMenu>
             </Button>
 
-            <Button Content="Edit Orders" Command="{Binding ShowEditOrdersCommand}" Margin="5" Width="100"
+            <Button Content="Edit Orders" Command="{Binding ShowOrdersCommand}" Margin="5" Width="100"
                    Visibility="{Binding IsEmployee, Converter={StaticResource BoolToVisibilityConverter}}" />
 
             <Button Content="Logout" Command="{Binding LogoutCommand}" Margin="5" Width="100" />

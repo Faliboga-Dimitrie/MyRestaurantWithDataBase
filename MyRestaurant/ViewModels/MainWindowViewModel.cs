@@ -16,17 +16,6 @@ namespace MyRestaurant.ViewModels
     {
         private UtilizatoriBLL _utilizatoriBLL;
         private Utilizatori _selectedUtilizator;
-        object _currentView;
-
-        public object CurrentView
-        {
-            get => _currentView;
-            set
-            {
-                _currentView = value;
-                OnPropertyChanged();
-            }
-        }
 
         public Utilizatori SelectedUtilizator
         {
@@ -45,9 +34,7 @@ namespace MyRestaurant.ViewModels
 
         public ICommand ShowViewMenuCommand { get; }
         public ICommand ShowPlaceOrderCommand { get; }
-        public ICommand ShowMyOrdersCommand { get; }
-
-        public ICommand ShowEditOrdersCommand { get; }
+        public ICommand ShowOrdersCommand { get; }
 
         public ICommand LogoutCommand { get; }
 
@@ -65,8 +52,7 @@ namespace MyRestaurant.ViewModels
             SelectedUtilizator = utilizatori;
             ShowViewMenuCommand = new RelayCommand<object>(ShowViewMenu);
             ShowPlaceOrderCommand = new RelayCommand<object>(ShowPlaceOrder);
-            ShowMyOrdersCommand = new RelayCommand<object>(ShowMyOrders);
-            ShowEditOrdersCommand = new RelayCommand<object>(ShowEditOrders);
+            ShowOrdersCommand = new RelayCommand<object>(ShowMyOrders);
             LogoutCommand = new RelayCommand<object>(Logout);
             ModifyPreparatCommand = new RelayCommand<object>(ShowModifyPreparat);
             ModifyAlergeniCommand = new RelayCommand<object>(ShowModifyAlergeni);
@@ -83,23 +69,21 @@ namespace MyRestaurant.ViewModels
 
         private void ShowPlaceOrder(object obj)
         {
-            // Logic to show the place order
+            Window window = new PlaceOrderView(_selectedUtilizator);
+            window.Show();
+            Application.Current.Windows[0]?.Close();
         }
 
         private void ShowMyOrders(object obj)
         {
-            // Logic to show the my orders
-        }
-
-        private void ShowEditOrders(object obj)
-        {
-            // Logic to show the edit orders
+            Window window = new ViewOrdersView(_selectedUtilizator);
+            window.Show();
+            Application.Current.Windows[0]?.Close();
         }
 
         private void Logout(object obj)
         {
             _selectedUtilizator = null;
-            CurrentView = null; // Or navigate to the login view
             var window = new StartWindow();
             window.Show();
             Application.Current.Windows[0]?.Close();

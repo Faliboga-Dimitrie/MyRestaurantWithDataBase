@@ -4,7 +4,7 @@
         xmlns:local="clr-namespace:MyRestaurant.Views"
         xmlns:vm="clr-namespace:MyRestaurant.ViewModels"
         xmlns:converters="clr-namespace:MyRestaurant.Convertors"
-        Title="Meniul Restaurantului" Height="800" Width="1000">
+        Title="Meniul Restaurantului" Height="600" Width="1000">
 
     <Window.Resources>
         <converters:MenuAvailabilityConverter x:Key="MenuAvailabilityConverter"/>

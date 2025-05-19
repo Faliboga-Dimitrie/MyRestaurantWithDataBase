@@ -16,40 +16,6 @@ namespace MyRestaurant.Models.BuisnessLogicLayer
         public ObservableCollection<Meniuri> MeniuriList { get; set; }
         public string ErrorMessage { get; set; }
 
-        public void AddMethode(object param)
-        {
-            Meniuri meniu = param as Meniuri;
-            if (meniu != null)
-            {
-                if (string.IsNullOrEmpty(meniu.Denumire))
-                {
-                    ErrorMessage = "Numele nu poate fi gol!";
-                }
-                else if (context.Meniuris.Any(m => m.Denumire == meniu.Denumire))
-                {
-                    ErrorMessage = "Un meniu cu acest nume exista deja!";
-                }
-                else
-                {
-                    try
-                    {
-                        meniu.Idmeniu = context.AddMeniu(meniu.Denumire, meniu.Idcategorie);
-                        context.SaveChanges();
-                        MeniuriList.Add(meniu);
-                        ErrorMessage = string.Empty;
-                    }
-                    catch (Exception ex)
-                    {
-                        ErrorMessage = ex.Message;
-                    }
-                }
-            }
-            else
-            {
-                ErrorMessage = "Meniul came as null";
-            }
-        }
-
         public async Task AddMethodeAsync(object param)
         {
             Meniuri meniu = param as Meniuri;

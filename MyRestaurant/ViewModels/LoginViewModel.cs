@@ -54,8 +54,8 @@ namespace MyRestaurant.ViewModels
 
         public ObservableCollection<Utilizatori> UtilizatoriList
         {
-            get => _utilizatoriBLL.UtilizatoriList; // Assuming UtilizatoriList is a property in UtilizatoriBLL
-            set => _utilizatoriBLL.UtilizatoriList = value; // Assuming UtilizatoriList is a property in UtilizatoriBLL
+            get => _utilizatoriBLL.UtilizatoriList; 
+            set => _utilizatoriBLL.UtilizatoriList = value; 
         }
 
         public ICommand LoginCommand { get; }

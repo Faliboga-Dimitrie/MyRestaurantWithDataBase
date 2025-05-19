@@ -15,23 +15,6 @@ using System.IO;
 
 namespace MyRestaurant.ViewModels
 {
-    public class SelectableAlergen : BasePropertyChanged
-    {
-        public Alergeni Alergen { get; set; }
-
-        private bool _isSelected;
-        public bool IsSelected
-        {
-            get => _isSelected;
-            set
-            {
-                _isSelected = value;
-                OnPropertyChanged();
-            }
-        }
-    }
-
-
     public class ModifyPreparatViewModel : BasePropertyChanged
     {
         private string _name;
@@ -386,6 +369,8 @@ namespace MyRestaurant.ViewModels
                 }
                 var itemToRemove = SelectableAlergeni.FirstOrDefault(c => c.Alergen.NumeAlergen.Equals(alergen.NumeAlergen, StringComparison.OrdinalIgnoreCase));
                 SelectableAlergeni.Remove(itemToRemove); // Remove the category from the list
+                //OnPropertyChanged(nameof(SelectedPreparat));
+                LoadSelectableAlergeni();
                 MessageBox.Show("Alergenul a fost sters cu success!", "Stergere", MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
