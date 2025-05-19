@@ -5,50 +5,90 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MyRestaurant.Convertors"
         mc:Ignorable="d"
-        Title="Manage Allergens" Height="450" Width="800">
+        Title="Gestionare Alergeni"
+        Height="450" Width="800"
+        WindowStartupLocation="CenterScreen"
+        Background="#f9fafa">
+
     <Window.Resources>
         <local:AlergeniConverter x:Key="AlergeniConverter"/>
         <local:StringToVisibilityConverter x:Key="StringToVisibilityConverter"/>
         <local:NullToBoolConverter x:Key="NullToBoolConverter"/>
+
+        <!-- Global Button Style -->
+        <Style TargetType="Button">
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Padding" Value="8,4"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Background" Value="#2196F3"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="MinWidth" Value="80"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" CornerRadius="4">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#1976D2"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" Value="#1565C0"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </Window.Resources>
 
     <Grid Margin="10">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="3*"/>
         </Grid.ColumnDefinitions>
 
-        <!-- Allergens List -->
-        <GroupBox Header="Existing Allergens" Grid.Column="0" Margin="0,0,10,0">
+        <!-- 📋 Allergens List -->
+        <GroupBox Header="📋 Alergeni existenți" Grid.Column="0" Margin="0,0,10,0" FontWeight="Bold">
             <ListView ItemsSource="{Binding AlergeniList}" 
                       SelectedItem="{Binding SelectedAlergen}"
-                      ScrollViewer.VerticalScrollBarVisibility="Auto">
+                      ScrollViewer.VerticalScrollBarVisibility="Auto"
+                      BorderThickness="0">
                 <ListView.ItemTemplate>
                     <DataTemplate>
-                        <TextBlock Text="{Binding NumeAlergen}" Padding="5"/>
+                        <Border Margin="4" Padding="4" Background="#f0f4f8" CornerRadius="4">
+                            <TextBlock Text="{Binding NumeAlergen}" FontSize="14"/>
+                        </Border>
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
         </GroupBox>
 
-        <!-- Management Section -->
+        <!-- ✍️ Management Section -->
         <StackPanel Grid.Column="1" Margin="10,0,0,0">
+            <TextBlock Text="✍️ Administrare Alergen" FontSize="18" FontWeight="Bold" Margin="0,0,0,15"/>
+
             <!-- Error Message -->
             <TextBlock Text="{Binding ErrorMessage}" 
                        Foreground="Red" 
+                       FontWeight="SemiBold"
+                       Visibility="{Binding ErrorMessage, Converter={StaticResource StringToVisibilityConverter}}"
                        Margin="0,0,0,10"
-                       TextWrapping="Wrap"
-                       Visibility="{Binding ErrorMessage, Converter={StaticResource StringToVisibilityConverter}}"/>
+                       TextWrapping="Wrap"/>
 
             <!-- Input Field -->
-            <Label Content="Allergen Name:"/>
-            <TextBox Text="{Binding AlergenName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                     Margin="0,0,0,10"/>
+            <TextBlock Text="Denumire alergen:" FontWeight="SemiBold"/>
+            <TextBox Text="{Binding AlergenName, UpdateSourceTrigger=PropertyChanged}" 
+                     Height="30" Margin="0,0,0,15"/>
 
             <!-- Action Buttons -->
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                <!-- Add Button -->
-                <Button Content="Add" Margin="0,0,10,0" Command="{Binding AddAlergenCommand}">
+            <WrapPanel HorizontalAlignment="Right">
+                <!-- Add -->
+                <Button Content="Adaugă" Command="{Binding AddAlergenCommand}">
                     <Button.CommandParameter>
                         <MultiBinding Converter="{StaticResource AlergeniConverter}">
                             <Binding Path="AlergenName"/>
@@ -56,9 +96,10 @@
                     </Button.CommandParameter>
                 </Button>
 
-                <!-- Update Button -->
-                <Button Content="Update" Margin="0,0,10,0" Command="{Binding UpdateAlergenCommand}"
-                IsEnabled="{Binding SelectedAlergen, Converter={StaticResource NullToBoolConverter}}">
+                <!-- Update -->
+                <Button Content="Actualizează"
+                        Command="{Binding UpdateAlergenCommand}"
+                        IsEnabled="{Binding SelectedAlergen, Converter={StaticResource NullToBoolConverter}}">
                     <Button.CommandParameter>
                         <MultiBinding Converter="{StaticResource AlergeniConverter}">
                             <Binding Path="AlergenName"/>
@@ -67,15 +108,27 @@
                     </Button.CommandParameter>
                 </Button>
 
-                <!-- Delete Button -->
-                <Button Content="Delete" Margin="0,0,10,0" 
-                Command="{Binding DeleteAlergenCommand}"
-                CommandParameter="{Binding SelectedAlergen}"
-                IsEnabled="{Binding SelectedAlergen, Converter={StaticResource NullToBoolConverter}}"/>
+                <!-- Delete -->
+                <Button Content="Șterge"
+                        Command="{Binding DeleteAlergenCommand}"
+                        CommandParameter="{Binding SelectedAlergen}"
+                        IsEnabled="{Binding SelectedAlergen, Converter={StaticResource NullToBoolConverter}}"/>
 
-                <!-- Back Button -->
-                <Button Content="Back" Command="{Binding BackToMain}"/>
-            </StackPanel>
+                <!-- Back -->
+                <Button Content="Înapoi" Background="#F44336"
+                        Command="{Binding BackToMain}">
+                    <Button.Style>
+                        <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+                            <Setter Property="Background" Value="#F44336"/>
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="#D32F2F"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
+            </WrapPanel>
         </StackPanel>
     </Grid>
 </Window>

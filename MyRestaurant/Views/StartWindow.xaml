@@ -5,12 +5,71 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MyRestaurant"
         mc:Ignorable="d"
-        Title="StartWindow" Height="450" Width="800">
-    <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
-        <Button Content="View Menu" Width="100" Height="30" Command="{Binding ViewMenuCommand}"/>
-        <Button Content="Register" Width="100" Height="30" Command="{Binding RegisterCommand}"/>
-        <Button Content="LogIn" Width="100" Height="30" Command="{Binding LoginCommand}"/>
-        <Button Content="Exit" Width="100" Height="30" Command="{Binding ExitCommand}"/>
-    </StackPanel>
-</Window>
+        Title="Welcome to MyRestaurant"
+        Height="450" Width="800"
+        WindowStartupLocation="CenterScreen"
+        Background="#f0f4f8">
 
+    <Window.Resources>
+        <!-- Button Style -->
+        <Style TargetType="Button">
+            <Setter Property="Width" Value="200"/>
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="Margin" Value="10"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Background" Value="#2196F3"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                                CornerRadius="6"
+                                BorderBrush="{TemplateBinding BorderBrush}" 
+                                BorderThickness="1">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#1976D2"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" Value="#1565C0"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Width="330">
+            <TextBlock Text="Welcome to MyRestaurant" 
+                       FontSize="26" 
+                       FontWeight="Bold"
+                       Foreground="#333" 
+                       Margin="0,0,0,30" 
+                       HorizontalAlignment="Center"/>
+
+            <Button Content="View Menu" Command="{Binding ViewMenuCommand}"/>
+            <Button Content="Register" Command="{Binding RegisterCommand}"/>
+            <Button Content="Log In" Command="{Binding LoginCommand}"/>
+            <Button Content="Exit" Command="{Binding ExitCommand}" Background="#F44336">
+                <Button.Style>
+                    <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+                        <Setter Property="Background" Value="#F44336"/>
+                        <Setter Property="Foreground" Value="White"/>
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#D32F2F"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
+        </StackPanel>
+    </Grid>
+</Window>

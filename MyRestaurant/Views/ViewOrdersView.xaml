@@ -3,10 +3,43 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:local="clr-namespace:MyRestaurant.Views"
         xmlns:converters="clr-namespace:MyRestaurant.Convertors"
-        Title="Vizualizare Comenzi" Height="600" Width="900">
+        Title="📦 Vizualizare Comenzi"
+        Height="600" Width="950"
+        WindowStartupLocation="CenterScreen"
+        Background="#f9fafa">
 
     <Window.Resources>
         <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+
+        <!-- Unified Button Style -->
+        <Style TargetType="Button">
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Padding" Value="8,4"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Background" Value="#2196F3"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="MinWidth" Value="100"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" CornerRadius="4">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#1976D2"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" Value="#1565C0"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </Window.Resources>
 
     <Grid Margin="20">
@@ -16,39 +49,64 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <!-- Error Message -->
+        <!-- 🔴 Error Message -->
         <TextBlock Text="{Binding ErrorMessage}" 
                    Foreground="Red" 
-                   FontWeight="Bold" 
+                   FontWeight="Bold"
                    Visibility="{Binding ErrorMessage, Converter={StaticResource BoolToVisibilityConverter}}"
                    Margin="0,0,0,10"/>
 
-        <!-- Orders Table -->
-        <DataGrid Grid.Row="1" 
+        <!-- 📋 Orders Table -->
+        <DataGrid Grid.Row="1"
                   ItemsSource="{Binding OrdersList}" 
                   SelectedItem="{Binding SelectedOrder}" 
                   AutoGenerateColumns="False" 
                   IsReadOnly="True" 
-                  Margin="0,10,0,10">
+                  Margin="0,0,0,10"
+                  RowHeight="32"
+                  AlternatingRowBackground="#f0f4f8"
+                  HeadersVisibility="Column"
+                  SelectionMode="Single">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Cod Unic" Binding="{Binding CodUnic}" Width="*"/>
-                <DataGridTextColumn Header="Client" Binding="{Binding IdutilizatorNavigation.Nume}" Width="*"/>
-                <DataGridTextColumn Header="Data" Binding="{Binding DataComanda}" Width="*"/>
-                <DataGridTextColumn Header="Stare" Binding="{Binding Stare}" Width="*"/>
-                <DataGridTextColumn Header="Cost" Binding="{Binding Cost}" Width="Auto"/>
+                <DataGridTextColumn Header="Cod Unic" Binding="{Binding CodUnic}" Width="2*"/>
+                <DataGridTextColumn Header="Client" Binding="{Binding IdutilizatorNavigation.Nume}" Width="2*"/>
+                <DataGridTextColumn Header="Data" Binding="{Binding DataComanda, StringFormat='{}{0:dd.MM.yyyy HH:mm}'}" Width="2*"/>
+                <DataGridTextColumn Header="Stare" Binding="{Binding Stare}" Width="1.5*"/>
+                <DataGridTextColumn Header="Cost" Binding="{Binding Cost, StringFormat='{}{0} lei'}" Width="*"/>
             </DataGrid.Columns>
         </DataGrid>
 
-        <!-- Status Change Section (Visible only to employees) -->
-        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,20,0,0"
-                    Visibility="{Binding IsEmployee, Converter={StaticResource BoolToVisibilityConverter}}">
-            <TextBlock Text="Schimba Status:" VerticalAlignment="Center" Margin="0,0,10,0"/>
-            <ComboBox Width="150" ItemsSource="{Binding OrderStatuses}" 
-                      SelectedItem="{Binding SelectedOrderStatus}" Margin="0,0,10,0"/>
-            <Button Content="Schimba" Command="{Binding ChangeOrderStatus}" Width="100"/>
+        <!-- 🛠 Status Change (Employee only) -->
+        <StackPanel Grid.Row="2"
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Center"
+                    Visibility="{Binding IsEmployee, Converter={StaticResource BoolToVisibilityConverter}}"
+                    Margin="0,15,0,0">
+            <TextBlock Text="🔄 Schimbă status:" VerticalAlignment="Center" FontWeight="SemiBold" Margin="0,0,10,0"/>
+            <ComboBox Width="160"
+                      ItemsSource="{Binding OrderStatuses}"
+                      SelectedItem="{Binding SelectedOrderStatus}"
+                      Margin="0,0,10,0"/>
+            <Button Content="Actualizează" Command="{Binding ChangeOrderStatus}"/>
         </StackPanel>
 
-        <!-- Back Button -->
-        <Button Grid.Row="2" Content="Inapoi" Command="{Binding BackToMain}" HorizontalAlignment="Left" Margin="0,20,0,0"/>
+        <!-- 🔙 Back Button -->
+        <Button Grid.Row="2"
+                Content="Înapoi"
+                Command="{Binding BackToMain}"
+                HorizontalAlignment="Left"
+                Background="#F44336"
+                Margin="0,15,0,0">
+            <Button.Style>
+                <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+                    <Setter Property="Background" Value="#F44336"/>
+                    <Style.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="#D32F2F"/>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </Button.Style>
+        </Button>
     </Grid>
 </Window>

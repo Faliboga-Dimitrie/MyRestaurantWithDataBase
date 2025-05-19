@@ -4,9 +4,13 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Title="Login" Height="350" Width="400">
+        Title="Autentificare"
+        Height="400" Width="420"
+        WindowStartupLocation="CenterScreen"
+        Background="#f0f4f8">
 
     <Window.Resources>
+        <!-- Placeholder style -->
         <Style x:Key="WatermarkedTextBox" TargetType="TextBox">
             <Setter Property="Template">
                 <Setter.Value>
@@ -35,33 +39,40 @@
         </Style>
     </Window.Resources>
 
-    <Grid Margin="20">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
+    <Grid>
+        <Border Width="320" Padding="20" Background="White" CornerRadius="8" VerticalAlignment="Center" HorizontalAlignment="Center" >
+            <StackPanel>
 
-        <TextBlock Text="Login" FontSize="24" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,0,0,20"/>
+                <!-- Title -->
+                <TextBlock Text="👤 Autentificare"
+                           FontSize="22"
+                           FontWeight="Bold"
+                           Foreground="#2E3A59"
+                           HorizontalAlignment="Center"
+                           Margin="0,0,0,20"/>
 
-        <StackPanel Grid.Row="1" VerticalAlignment="Top" HorizontalAlignment="Center" Width="300">
+                <!-- Email -->
+                <TextBlock Text="Email" FontWeight="SemiBold" Margin="0,5,0,2"/>
+                <TextBox Style="{StaticResource WatermarkedTextBox}"
+                         Tag="ex: user@email.com"
+                         Text="{Binding Email, UpdateSourceTrigger=PropertyChanged}"
+                         Margin="0,0,0,10"
+                         Height="32"/>
 
-            <!-- Email -->
-            <TextBox Style="{StaticResource WatermarkedTextBox}" Tag="Email"
-                     Text="{Binding Email, UpdateSourceTrigger=PropertyChanged}" Margin="0,5"/>
+                <!-- Password -->
+                <TextBlock Text="Parolă" FontWeight="SemiBold" Margin="0,5,0,2"/>
+                <TextBox Style="{StaticResource WatermarkedTextBox}" Tag="12345"
+                        Text="{Binding Password, UpdateSourceTrigger=PropertyChanged}" Margin="0,5"/>
+                <!-- Error Message -->
+                <TextBlock Text="{Binding ErrorMessage}" Foreground="Red"
+                           FontWeight="SemiBold" TextWrapping="Wrap" Margin="0,5,0,5"/>
 
-            <!-- Password -->
-            <TextBox Style="{StaticResource WatermarkedTextBox}" Tag="Password"
-                    Text="{Binding Password, UpdateSourceTrigger=PropertyChanged}" Margin="0,5"/>
-
-            <!-- Error Message -->
-            <TextBlock Text="{Binding ErrorMessage}" Foreground="Red" Margin="0,5" TextWrapping="Wrap" />
-
-            <!-- Buttons -->
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10">
-                <Button Content="Login" Width="100" Margin="5,0" Command="{Binding LoginCommand}" />
-                <Button Content="Back" Width="100" Margin="5,0" Command="{Binding BackCommand}" />
+                <!-- Buttons -->
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,15,0,0">
+                    <Button Content="Login" Width="100" Margin="5,0" Command="{Binding LoginCommand}" />
+                    <Button Content="Înapoi" Width="100" Margin="5,0" Command="{Binding BackCommand}" />
+                </StackPanel>
             </StackPanel>
-
-        </StackPanel>
+        </Border>
     </Grid>
 </Window>

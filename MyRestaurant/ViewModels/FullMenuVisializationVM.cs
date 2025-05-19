@@ -71,6 +71,20 @@ namespace MyRestaurant.ViewModels
             }
         }
 
+        private bool _showPreparates;
+        public bool ShowPreparates
+        {
+            get => _showPreparates;
+            set { _showPreparates = value; OnPropertyChanged(); }
+        }
+
+        private bool _showMeniuri;
+        public bool ShowMeniuri
+        {
+            get => _showMeniuri;
+            set { _showMeniuri = value; OnPropertyChanged(); }
+        }
+
         public ObservableCollection<Preparate> PreparateList
         {
             get => _preparateBLL.PreparateList;
@@ -113,6 +127,8 @@ namespace MyRestaurant.ViewModels
 
         public ICommand FilterCommand { get; }
 
+        public ICommand TogglePreparatesCommand;
+        public ICommand ToggleMeniuriCommand;
 
         public FullMenuVisializationVM(Utilizatori? currentUser)
         {
@@ -131,9 +147,13 @@ namespace MyRestaurant.ViewModels
             MeniuriList = _meniuriBLL.GetMeniuriListFullData();
 
             CurrentUser = currentUser;
+            ShowMeniuri = true;
+            ShowPreparates = true;
             Back = new RelayCommand<object>(BackToMainWindow);
             FilterCommand = new RelayCommand<object>(_ => ApplyFilters());
             ApplyFilters();
+            TogglePreparatesCommand = new RelayCommand<object>(ChangePreparateVisibility);
+            ToggleMeniuriCommand = new RelayCommand<object>(ChangeMeniuriVisibility);
         }
 
         private void ApplyFilters()
@@ -198,7 +218,17 @@ namespace MyRestaurant.ViewModels
             OnPropertyChanged(nameof(FilteredCategoriList));
         }
 
+        public void ChangePreparateVisibility(object param)
+        {
+            ShowPreparates = !ShowPreparates;
+            OnPropertyChanged(nameof(ShowPreparates));
+        }
 
+        public void ChangeMeniuriVisibility(object param)
+        {
+            ShowMeniuri = !ShowMeniuri;
+            OnPropertyChanged(nameof(ShowMeniuri));
+        }
         public void BackToMainWindow(object param)
         {
             Window mainWindow = CurrentUser != null ? (Window)new MainWindow(CurrentUser) : new StartWindow();

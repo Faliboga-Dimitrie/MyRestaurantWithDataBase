@@ -11,6 +11,8 @@
         <converters:IsIndisponibilConverter x:Key="IsIndisponibilConverter"/>
         <converters:AlergenListToStringConverter x:Key="AlergenListToStringConverter"/>
         <converters:ByteArrayToImageConverter x:Key="ByteArrayToImageConverter"/>
+        <converters:BoolToToggleTextConverter x:Key="BoolToToggleTextConverter"/>
+        <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
         <Style x:Key="WatermarkedTextBox" TargetType="TextBox">
             <Setter Property="Template">
                 <Setter.Value>
@@ -69,7 +71,7 @@
 
                 <TextBox Width="200"
                  Style="{StaticResource WatermarkedTextBox}"
-                 Tag="Caută alergen..."
+                 Tag="Caută produse fara alergen..."
                  Text="{Binding SearchByAlergen, UpdateSourceTrigger=PropertyChanged}" />
 
                 <Button Content="Filtrează"
@@ -84,21 +86,36 @@
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Margin="0,10">
-                            <TextBlock Text="{Binding NumeCategorie}" FontWeight="Bold" FontSize="18" Foreground="DarkSlateGray" />
+                            <TextBlock Text="{Binding NumeCategorie}" FontWeight="Bold" FontSize="18" Foreground="DarkSlateGray" Margin="0,0,0,10"/>
+
+                            <TextBlock Text="{Binding NumeCategorie}" FontWeight="Bold" FontSize="18" Foreground="DarkSlateGray" Margin="0,0,0,10"/>
+
+                            <!-- 🔻 Toggle & Label: Preparates -->
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="5,5,0,5">
+                                <TextBlock Text="🍽️ Preparatele din categorie" FontSize="16" FontWeight="SemiBold" Foreground="#2E3A59"/>
+                                <Button Content="{Binding ShowPreparates, Converter={StaticResource BoolToToggleTextConverter}}" 
+                                    Command="{Binding TogglePreparatesCommand}" 
+                                    Width="80" Height="24" Margin="10,0,0,0"/>
+                            </StackPanel>
 
                             <!-- Preparates in Category -->
-                            <ItemsControl ItemsSource="{Binding Preparates}">
+                            <ItemsControl ItemsSource="{Binding Preparates}" Visibility="{Binding ShowPreparates, Converter={StaticResource BoolToVisibilityConverter}}">
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
                                         <Border BorderBrush="Gray" BorderThickness="1" Margin="5" Padding="5">
                                             <StackPanel Orientation="Horizontal" VerticalAlignment="Top">
-                                                <Image Width="100" Height="100" Source="{Binding Fotografis[0].Fotografie, Converter={StaticResource ByteArrayToImageConverter}}" Margin="0,0,10,0"/>
+                                                <Image Width="100" Height="100"
+                                               Source="{Binding Fotografis[0].Fotografie, Converter={StaticResource ByteArrayToImageConverter}}"
+                                               Margin="0,0,10,0"/>
                                                 <StackPanel>
-                                                    <TextBlock Text="{Binding Denumire}" FontSize="16" />
+                                                    <TextBlock Text="{Binding Denumire}" FontSize="16" FontWeight="Bold"/>
                                                     <TextBlock Text="{Binding CantitatePortie, StringFormat='Portie: {0}g'}"/>
                                                     <TextBlock Text="{Binding Pret, StringFormat='Preț: {0} lei'}"/>
                                                     <TextBlock Text="{Binding Idalergens, Converter={StaticResource AlergenListToStringConverter}, StringFormat='Alergeni: {0}'}"/>
-                                                    <TextBlock Text="INDISPONIBIL" Foreground="Red" FontWeight="Bold" Visibility="{Binding CantitateTotala, Converter={StaticResource IsIndisponibilConverter}}"/>
+                                                    <TextBlock Text="INDISPONIBIL"
+                                                       Foreground="Red"
+                                                       FontWeight="Bold"
+                                                       Visibility="{Binding CantitateTotala, Converter={StaticResource IsIndisponibilConverter}}"/>
                                                 </StackPanel>
                                             </StackPanel>
                                         </Border>
@@ -106,14 +123,20 @@
                                 </ItemsControl.ItemTemplate>
                             </ItemsControl>
 
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="5,15,0,5">
+                                <TextBlock Text="🧾 Meniurile din categorie" FontSize="16" FontWeight="SemiBold" Foreground="#2E3A59"/>
+                                <Button Content="{Binding ShowMeniuri, Converter={StaticResource BoolToToggleTextConverter}}" 
+                                    Command="{Binding ToggleMeniuriCommand}" 
+                                    Width="80" Height="24" Margin="10,0,0,0"/>
+                            </StackPanel>
                             <!-- Meniuri in Category -->
-                            <ItemsControl ItemsSource="{Binding Meniuris}">
+                            <ItemsControl ItemsSource="{Binding Meniuris}" Visibility="{Binding ShowMeniuri, Converter={StaticResource BoolToVisibilityConverter}}">
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
                                         <Border BorderBrush="DarkGray" BorderThickness="1" Margin="5" Padding="5">
                                             <StackPanel>
-                                                <TextBlock Text="{Binding Denumire}" FontSize="16" FontWeight="SemiBold"/>
-                                                <TextBlock Text="Conține:" FontWeight="Bold"/>
+                                                <TextBlock Text="{Binding Denumire}" FontSize="16" FontWeight="Bold"/>
+                                                <TextBlock Text="Conține:" FontWeight="Bold" Margin="0,5,0,2"/>
                                                 <ItemsControl ItemsSource="{Binding MeniuPreparats}">
                                                     <ItemsControl.ItemTemplate>
                                                         <DataTemplate>
@@ -121,8 +144,10 @@
                                                         </DataTemplate>
                                                     </ItemsControl.ItemTemplate>
                                                 </ItemsControl>
-                                                <TextBlock Text="INDISPONIBIL" Foreground="Red" FontWeight="Bold"
-                                                           Visibility="{Binding MeniuPreparats, Converter={StaticResource MenuAvailabilityConverter}}"/>
+                                                <TextBlock Text="INDISPONIBIL"
+                                                   Foreground="Red"
+                                                   FontWeight="Bold"
+                                                   Visibility="{Binding MeniuPreparats, Converter={StaticResource MenuAvailabilityConverter}}"/>
                                             </StackPanel>
                                         </Border>
                                     </DataTemplate>
