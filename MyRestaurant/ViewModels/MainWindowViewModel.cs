@@ -32,6 +32,18 @@ namespace MyRestaurant.ViewModels
             get => SelectedUtilizator.TipUtilizator == "Angajat";
         }
 
+        private bool _isMenuEditActive = false;
+
+        public bool IsMenuEditActive
+        {             
+            get => _isMenuEditActive;
+            set
+            {
+                _isMenuEditActive = value;
+                OnPropertyChanged();
+            }
+        }
+
         public ICommand ShowViewMenuCommand { get; }
         public ICommand ShowPlaceOrderCommand { get; }
         public ICommand ShowOrdersCommand { get; }
@@ -46,6 +58,8 @@ namespace MyRestaurant.ViewModels
 
         public ICommand ModifyMenuCommand { get; }
 
+        public ICommand ToggleMenuEditCommand { get; }
+
         public MainWindowViewModel(Utilizatori utilizatori)
         {
             _utilizatoriBLL = new UtilizatoriBLL();
@@ -58,6 +72,7 @@ namespace MyRestaurant.ViewModels
             ModifyAlergeniCommand = new RelayCommand<object>(ShowModifyAlergeni);
             ModifyCategorieCommand = new RelayCommand<object>(ShowModifyCategorie);
             ModifyMenuCommand = new RelayCommand<object>(ShowModifyMenu);
+            ToggleMenuEditCommand = new RelayCommand<object>(ToggleMenuEdit);
         }
 
         private void ShowViewMenu(object obj)
@@ -115,6 +130,11 @@ namespace MyRestaurant.ViewModels
             var window = new ModifyMenuView(_selectedUtilizator);
             window.Show();
             Application.Current.Windows[0]?.Close();
+        }
+
+        public void ToggleMenuEdit(object obj)
+        {
+            IsMenuEditActive = !IsMenuEditActive;
         }
     }
 }

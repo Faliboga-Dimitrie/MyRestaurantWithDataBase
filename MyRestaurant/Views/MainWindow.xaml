@@ -61,17 +61,35 @@
 
             <Button Content="View Orders" Command="{Binding ShowOrdersCommand}" />
 
+            <!-- Toggle Button -->
+            <Button Content="Edit Menu"
+            Command="{Binding ToggleMenuEditCommand}"
+            Visibility="{Binding IsEmployee, Converter={StaticResource BoolToVisibilityConverter}}"/>
+
+
             <!-- Employee-Only Actions -->
-            <Button Content="Edit Menu" Visibility="{Binding IsEmployee, Converter={StaticResource BoolToVisibilityConverter}}">
-                <Button.ContextMenu>
-                    <ContextMenu>
-                        <MenuItem Header="Modify Preparat" Command="{Binding ModifyPreparatCommand}" />
-                        <MenuItem Header="Modify Alergeni" Command="{Binding ModifyAlergeniCommand}" />
-                        <MenuItem Header="Modify Categorie" Command="{Binding ModifyCategorieCommand}" />
-                        <MenuItem Header="Modify Meniu" Command="{Binding ModifyMenuCommand}" />
-                    </ContextMenu>
-                </Button.ContextMenu>
-            </Button>
+            <Border Visibility="{Binding IsMenuEditActive, Converter={StaticResource BoolToVisibilityConverter}}"
+                    Background="White"
+                    CornerRadius="6"
+                    BorderBrush="#ccc"
+                    BorderThickness="1"
+                    Padding="10"
+                    Margin="0,5,0,0"
+                    HorizontalAlignment="Center">
+                <StackPanel Orientation="Horizontal">
+                    <StackPanel>
+                        <!-- Hidden Buttons -->
+                        <StackPanel Orientation="Horizontal"
+                                    Visibility="{Binding IsMenuEditActive, Converter={StaticResource BoolToVisibilityConverter}}"
+                                    Margin="0,5,0,0">
+                            <Button Content="Modify Preparat" Command="{Binding ModifyPreparatCommand}" />
+                            <Button Content="Modify Alergeni" Command="{Binding ModifyAlergeniCommand}" />
+                            <Button Content="Modify Categorie" Command="{Binding ModifyCategorieCommand}" />
+                            <Button Content="Modify Meniu" Command="{Binding ModifyMenuCommand}" />
+                        </StackPanel>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
 
             <Button Content="Edit Orders" Command="{Binding ShowOrdersCommand}"
                     Visibility="{Binding IsEmployee, Converter={StaticResource BoolToVisibilityConverter}}" />

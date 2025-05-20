@@ -3,23 +3,50 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:vm="clr-namespace:MyRestaurant.ViewModels"
         xmlns:conv="clr-namespace:MyRestaurant.Convertors"
-        Title="Modify Categories" Height="500" Width="650"
+        Title="Modify Categories" Height="500" Width="700"
         WindowStartupLocation="CenterScreen"
-        ResizeMode="CanResize">
+        ResizeMode="CanResize"
+        Background="#FAFAFA">
 
     <Window.Resources>
+        <!-- Converters -->
         <conv:CategoriiConvertor x:Key="CategoriiConvertor" />
         <conv:NullToBoolConverter x:Key="NullToBoolConverter" />
 
-        <!-- Simple style for buttons -->
+        <!-- Styled Button -->
         <Style TargetType="Button">
-            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Margin" Value="6"/>
             <Setter Property="Padding" Value="8,4"/>
-            <Setter Property="MinWidth" Value="80"/>
+            <Setter Property="MinWidth" Value="90"/>
             <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Background" Value="#2196F3"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                                CornerRadius="4"
+                                BorderBrush="{TemplateBinding BorderBrush}" 
+                                BorderThickness="1">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" Margin="4,2"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#1976D2"/>
+                </Trigger>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter Property="Opacity" Value="0.4"/>
+                    <Setter Property="Cursor" Value="Arrow"/>
+                </Trigger>
+            </Style.Triggers>
         </Style>
 
-        <!-- Style for error message text -->
+        <!-- Error text style -->
         <Style TargetType="TextBlock" x:Key="ErrorTextStyle">
             <Setter Property="Foreground" Value="Red"/>
             <Setter Property="FontWeight" Value="Bold"/>
@@ -28,57 +55,58 @@
         </Style>
     </Window.Resources>
 
-    <Grid Margin="15" >
+    <Grid Margin="20">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
-            <!-- Input section -->
             <RowDefinition Height="Auto"/>
-            <!-- Error message -->
             <RowDefinition Height="*"/>
-            <!-- List/DataGrid -->
             <RowDefinition Height="Auto"/>
-            <!-- Buttons -->
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
-        <!-- Category Name Input -->
+        <!-- Input Section -->
         <Label Grid.Row="0" Grid.Column="0" Content="Category Name:" 
-               VerticalAlignment="Center" FontSize="14" FontWeight="SemiBold"/>
+               VerticalAlignment="Center" FontSize="14" FontWeight="SemiBold" />
         <TextBox Grid.Row="0" Grid.Column="1" 
                  Text="{Binding CategorieName, UpdateSourceTrigger=PropertyChanged}" 
-                 FontSize="14" Padding="6" />
+                 FontSize="14" Padding="6"
+                 Margin="0,0,0,8" />
 
         <!-- Error Message -->
-        <TextBlock Grid.Row="1" Grid.ColumnSpan="2" 
+        <TextBlock Grid.Row="1" Grid.ColumnSpan="2"
                    Text="{Binding ErrorMessage}" 
                    Style="{StaticResource ErrorTextStyle}" />
 
-        <!-- Categories DataGrid -->
-        <DataGrid Grid.Row="2" Grid.ColumnSpan="2" 
-                  ItemsSource="{Binding CategoriList}" 
-                  SelectedItem="{Binding SelectedCategory, Mode=TwoWay}" 
-                  AutoGenerateColumns="False" 
-                  CanUserAddRows="False"
-                  CanUserDeleteRows="False"
-                  IsReadOnly="True"
-                  Height="280"
-                  Margin="0,0,0,10"
-                  FontSize="13"
-                  SelectionMode="Single">
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="Category Name" Binding="{Binding NumeCategorie}" Width="*" />
-            </DataGrid.Columns>
-        </DataGrid>
+        <!-- DataGrid for Categories -->
+        <GroupBox Grid.Row="2" Grid.ColumnSpan="2" Header="Lista Categorii" Margin="0,10,0,10">
+            <DataGrid ItemsSource="{Binding CategoriList}" 
+                      SelectedItem="{Binding SelectedCategory, Mode=TwoWay}" 
+                      AutoGenerateColumns="False"
+                      CanUserAddRows="False"
+                      CanUserDeleteRows="False"
+                      IsReadOnly="True"
+                      FontSize="13"
+                      SelectionMode="Single"
+                      HeadersVisibility="Column"
+                      RowHeaderWidth="0"
+                      Margin="5"
+                      Background="WhiteSmoke"
+                      BorderThickness="0"
+                      GridLinesVisibility="None"
+                      ColumnWidth="*">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Category Name" Binding="{Binding NumeCategorie}" />
+                </DataGrid.Columns>
+            </DataGrid>
+        </GroupBox>
 
-        <!-- Buttons Panel -->
-        <StackPanel Grid.Row="3" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Center" >
-            <Button Content="Add" 
-                    Command="{Binding AddCategorieCommand}" 
-                    ToolTip="Add new category">
+        <!-- Buttons -->
+        <StackPanel Grid.Row="3" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Center">
+            <Button Content="Add" Command="{Binding AddCategorieCommand}" ToolTip="Add new category">
                 <Button.CommandParameter>
                     <MultiBinding Converter="{StaticResource CategoriiConvertor}">
                         <Binding Path="CategorieName" />
@@ -101,7 +129,7 @@
                     Command="{Binding DeleteCategorieCommand}" 
                     IsEnabled="{Binding SelectedCategory, Converter={StaticResource NullToBoolConverter}}"
                     ToolTip="Delete selected category"
-                    Background="#E57373" Foreground="White">
+                    Background="#D32F2F">
                 <Button.CommandParameter>
                     <MultiBinding Converter="{StaticResource CategoriiConvertor}">
                         <Binding Path="SelectedCategory.NumeCategorie"/>
@@ -111,7 +139,8 @@
 
             <Button Content="Back" 
                     Command="{Binding BackToMain}" 
-                    ToolTip="Return to main menu" />
+                    ToolTip="Return to main menu"
+                    Background="#9E9E9E" />
         </StackPanel>
     </Grid>
 </Window>

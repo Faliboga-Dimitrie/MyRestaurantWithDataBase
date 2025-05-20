@@ -61,7 +61,7 @@
 
                 <!-- Password -->
                 <TextBlock Text="Parolă" FontWeight="SemiBold" Margin="0,5,0,2"/>
-                <TextBox Style="{StaticResource WatermarkedTextBox}" Tag="12345"
+                <TextBox Style="{StaticResource WatermarkedTextBox}" Tag="ex: 12345"
                         Text="{Binding Password, UpdateSourceTrigger=PropertyChanged}" Margin="0,5"/>
                 <!-- Error Message -->
                 <TextBlock Text="{Binding ErrorMessage}" Foreground="Red"
